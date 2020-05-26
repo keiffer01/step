@@ -13,16 +13,21 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Returns a random fun fact about me until all facts are exhausted.
  */
-function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
-
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
-}
+var getRandomFact = (function() {
+    const facts = ['hello', 'world'];
+    return function() {
+        if (facts.length == 0) {
+            const factContainer = document.getElementById('facts');
+            const generatorContainer = document.getElementById('generate-fact');
+            factContainer.innerText = 'Empty!';
+            generatorContainer.parentNode.removeChild(generatorContainer);
+        }
+        else {
+            const fact = facts.splice(Math.floor(Math.random() * facts.length), 1);
+            const factContainer = document.getElementById('facts');
+            factContainer.innerText = fact;
+        }
+    }
+})();

@@ -1,9 +1,113 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+/* Navbar wrapper to set spacing */
+#wrapper {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-#greeting-container {
-  margin-top: 20px;
+/* Navbar contents styling */
+nav {
+    height: 48px;
+}
+
+nav ul {
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+}
+
+nav li a {
+    color: #344feb;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+nav li a:hover {
+    color: #3493eb;
+}
+
+/* About page intro styling */
+#intro {
+	font-family: 'Roboto', serif;
+	font-weight: bold;
+	color: #05072e;
+	height: 100vh;
+	width: 100%;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#intro .block {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: left;
+}
+
+/* Fine-tune each section of the intro */
+@keyframes fade-in-top {
+	from {opacity: 0%; bottom: 25px;}
+	to {opacity: 100%; bottom: 0px;}
+}
+
+/* Animation with a simulated delay */
+@keyframes fade-in-bottom {
+	0% {opacity: 0%;}
+	66% {opacity: 0%; top: 25px;}
+	100% {opacity: 100%; top: 0px;}
+}
+
+#hi {
+	font-size: 48px;
+	line-height: 5%;
+	position: relative;
+	animation: fade-in-top 1s ease;
+}
+
+#name {
+	font-size: 96px;
+	line-height: 15%;
+	position: relative;
+	animation: fade-in-top 1s ease;
+}
+
+#blurb {
+	font-size: 24px;
+	color: #4b4d6b;
+	position: relative;
+	animation: fade-in-bottom 3s ease;
+}
+
+/* General styling for two-column sections */
+.two-columns {
+	display: table;
+	width: 100%;
+}
+
+.column {
+	display: table-cell;
+}
+
+.left {
+	margin-left: 20%;
+}
+
+.right {
+	vertical-align: top;
+	text-align: left;
+}
+
+/* If the browser window is smaller than 600px, make the columns stack on top of each other */
+@media only screen and (max-width: 600px) {
+  .column {
+    display: block;
+    width: 100%;
+  }
+}
+
+img {
+	width: 400px;
+	max-width: 100%;
 }
