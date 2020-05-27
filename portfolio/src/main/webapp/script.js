@@ -14,6 +14,11 @@
 
 /*
  * Returns a random fun fact about me until all facts are exhausted.
+ * 
+ * REQUIRES: none
+ * ENSURES: The "facts" container is replaced with a randomly chosen fun fact as
+ *          defined in the facts array, and that fact is removed from facts. If
+ *          the facts array is empty, the "generate-fact" container is removed.
  */
 var getRandomFact = (function() {
     const facts = ["hello", "world"];
@@ -31,18 +36,3 @@ var getRandomFact = (function() {
         }
     }
 })();
-
-/*
- * Sticky navbar code - from W3Schools
- */
-window.onscroll = function() {addOrRemoveSticky()};
-var navbar = document.getElementById("navbar");
-var sticky = navbar.offsetTop;
-
-function addOrRemoveSticky() {
-    if (window.pageYOffset >= sticky) {
-        navbar.classList.add("sticky");
-    } else {
-        navbar.classList.remove("sticky");
-    }
-}

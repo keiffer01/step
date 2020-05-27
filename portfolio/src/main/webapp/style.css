@@ -4,8 +4,13 @@ nav {
     opacity: 95%;
     overflow: hidden;
     z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 }
 
+/* Sets up list of links to be centered in the navbar */
 nav ul {
     height: 3em;
     width: 600px;
@@ -17,6 +22,7 @@ nav li {
     float: left;
 }
 
+/* Style navbar links */
 nav a {
     display: block;
     text-align: center;
@@ -32,16 +38,6 @@ nav a {
 nav a:hover {
     background: #0d224a;
     color: #859ecc;
-}
-
-.sticky {
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
-
-.sticky + #intro {
-    padding-top: 60px;
 }
 
 /* About page intro styling */
@@ -63,19 +59,19 @@ nav a:hover {
 	text-align: left;
 }
 
-/* Fine-tune each section of the intro */
+/* Animations for the intro*/
 @keyframes fade-in-top {
 	from {opacity: 0%; bottom: 25px;}
 	to {opacity: 100%; bottom: 0px;}
 }
 
-/* Animation with a simulated delay */
 @keyframes fade-in-bottom {
 	0% {opacity: 0%;}
 	66% {opacity: 0%; top: 25px;}
 	100% {opacity: 100%; top: 0px;}
 }
 
+/* Fine-tune each section of the intro */
 #hi {
 	font-size: 48px;
 	line-height: 5%;
