@@ -12,22 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
+/*
  * Returns a random fun fact about me until all facts are exhausted.
  */
 var getRandomFact = (function() {
-    const facts = ['hello', 'world'];
+    const facts = ["hello", "world"];
     return function() {
         if (facts.length == 0) {
-            const factContainer = document.getElementById('facts');
-            const generatorContainer = document.getElementById('generate-fact');
-            factContainer.innerText = 'Empty!';
+            const factContainer = document.getElementById("facts");
+            const generatorContainer = document.getElementById("generate-fact");
+            factContainer.innerText = "Empty!";
             generatorContainer.parentNode.removeChild(generatorContainer);
         }
         else {
             const fact = facts.splice(Math.floor(Math.random() * facts.length), 1);
-            const factContainer = document.getElementById('facts');
+            const factContainer = document.getElementById("facts");
             factContainer.innerText = fact;
         }
     }
 })();
+
+/*
+ * Sticky navbar code - from W3Schools
+ */
+window.onscroll = function() {addOrRemoveSticky()};
+var navbar = document.getElementById("navbar");
+var sticky = navbar.offsetTop;
+
+function addOrRemoveSticky() {
+    if (window.pageYOffset >= sticky) {
+        navbar.classList.add("sticky");
+    } else {
+        navbar.classList.remove("sticky");
+    }
+}
