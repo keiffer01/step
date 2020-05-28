@@ -100,28 +100,30 @@ nav a:hover {
 
 /* General styling for two-column sections */
 .two-columns {
-	display: table;
-	width: 100%;
+	display: flex;
+    margin: 0 10vw;
 }
 
 .column {
-	display: table-cell;
+	flex: 1;
 }
 
+/* Left columns should have an image */
 .left {
-	margin-left: 20%;
+    text-align: center;
+	vertical-align: middle;
 }
 
+/* Right columns should have text description */
 .right {
 	vertical-align: top;
 	text-align: left;
 }
 
 /* If the browser window is smaller than 600px, make the columns stack on top of each other */
-@media only screen and (max-width: 600px) {
-  .column {
-    display: block;
-    width: 100%;
+@media only screen and (max-width: 800px) {
+  .two-columns {
+    flex-direction: column;
   }
 }
 
