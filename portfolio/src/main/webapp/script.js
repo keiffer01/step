@@ -20,7 +20,7 @@
  *          defined in the facts array, and that fact is removed from facts. If
  *          the facts array is empty, the "generate-fact" container is removed.
  */
-var getRandomFact = (function() {
+let getRandomFact = (function() {
     const facts = ["hello", "world"];
     return function() {
         if (facts.length == 0) {
