@@ -101,11 +101,7 @@ nav a:hover {
 /* General styling for two-column sections */
 .two-columns {
 	display: flex;
-    margin: 0 10vw;
-}
-
-.column {
-	flex: 1;
+    justify-content: space-evenly;
 }
 
 /* Left columns should have an image */
@@ -118,12 +114,26 @@ nav a:hover {
 .right {
 	vertical-align: top;
 	text-align: left;
+    margin-right: 10vw;
+}
+
+/* Make image of me rounded and add shadow*/
+#me {
+    margin-top: 20%;
+    margin-bottom: 20%;
+    width: 350px;
+    max-width: 100%;
+    border-radius: 50%;
+    box-shadow: -5px 10px 10px #232529;
 }
 
 /* If the browser window is smaller than 600px, make the columns stack on top of each other */
 @media only screen and (max-width: 800px) {
   .two-columns {
     flex-direction: column;
+  }
+  .right {
+      margin-left: 10vw;
   }
 }
 
