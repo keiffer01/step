@@ -1,3 +1,8 @@
+/* Top margin for navbar */
+body {
+    padding-top: 40px;
+}
+
 /* Navbar styling */
 nav {
     background-color: #859ecc;
