@@ -98,8 +98,21 @@ nav a:hover {
 	animation: fade-in-bottom 3s ease;
 }
 
+.title {
+    font-family: 'Lato', serif;
+    font-size: 48px;
+    padding-left: 40px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-family: "Roboto Slab", serif;
+    font-size: 24px;
+}
+
 .header {
     font-family: 'Lato', serif;
+    font-weight: bold;
     font-size: 64px;
     margin-left: 5vw;
 }
@@ -110,6 +123,26 @@ hr {
     color: #adaeb8;
     background-color: #adaeb8;
     height: 2px;
+}
+
+ul.links {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.links li {
+    display: inline-block;
+    font-size: 8px;
+}
+
+ul.links ion-icon {
+    font-size: 32px;
+    color: #0d2e54;
+}
+
+ul.links ion-icon:hover {
+    color: #2f73c2;
 }
 
 /* General styling for two-column sections */
@@ -145,7 +178,7 @@ img {
 }
 
 /* If the browser window is small, make the columns stack on top of each other */
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 900px) {
   .two-columns {
     flex-direction: column;
   }
