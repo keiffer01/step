@@ -153,3 +153,23 @@ img {
       margin-left: 10vw;
   }
 }
+
+footer {
+    font-family: 'Roboto Slab', serif;
+    font-size: 16px;
+    padding: 16px;
+    color: #0d224a;
+    background-color: #859ecc;
+}
+
+button {
+    border: none;
+    outline: none;
+    color: #1e5a9e;
+    background-color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
