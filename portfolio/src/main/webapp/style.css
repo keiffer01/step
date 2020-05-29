@@ -66,14 +66,14 @@ section.intro div {
 
 /* Animations for the intro*/
 @keyframes fade-in-top {
-	from {bottom: 25px; opacity: 0%;}
-	to {bottom: 0px; opacity: 100%;}
+	from {bottom: 25px; opacity: 0;}
+	to {bottom: 0; opacity: 100%;}
 }
 
 @keyframes fade-in-bottom {
-	0% {opacity: 0%;}
-	66% {opacity: 0%; top: 25px;}
-	100% {opacity: 100%; top: 0px;}
+	0% {opacity: 0;}
+	66% {opacity: 0; top: 25px;}
+	100% {opacity: 100%; top: 0;}
 }
 
 /* Fine-tune each section of the intro */
