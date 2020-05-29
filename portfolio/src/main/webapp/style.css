@@ -3,6 +3,7 @@ body {
     padding-top: 40px;
 }
 
+/* TODO: Make navbar responsive to small screens */
 /* Navbar styling */
 nav {
     background-color: #859ecc;
@@ -46,7 +47,7 @@ nav a:hover {
 }
 
 /* About page intro styling */
-section.intro {
+.intro {
     align-items: center;
     color: #05072e;
     display: flex;
@@ -58,7 +59,7 @@ section.intro {
 	width: 100%;
 }
 
-section.intro div {
+.intro div {
 	display: inline-block;
 	text-align: left;
     vertical-align: middle;
@@ -98,39 +99,41 @@ section.intro div {
 	animation: fade-in-bottom 3s ease;
 }
 
-section.two-columns {
+.two-columns {
+    align-items: center;
 	display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    margin-bottom: 40px;
 }
 
 /* Left columns should have an image */
-section.two-columns div.left {
+.two-columns div.left {
     text-align: center;
 	vertical-align: middle;
 }
 
 /* Right columns should have text description */
-section.two-columns div.right {
-	margin-right: 10vw;
+.two-columns div.right {
+    flex-basis: 50%;
     text-align: left;
-    vertical-align: top;
 }
 
 /* If the browser window is small, make the columns stack on top of each other and
- * add margin to left margin to right columns
+ * add margins to right columns and header
  */
 @media only screen and (max-width: 900px) {
     .two-columns {
         flex-direction: column;
     }
     .right {
-        margin-left: 10vw;
+        margin: 40px 10vw;
+    }
+    .header {
+        margin-bottom: 40px;
     }
 }
 
 img {
-    margin-bottom: 20%;
-    margin-top: 20%;
     max-width: 100%;
     width: 350px;
 }
@@ -142,14 +145,14 @@ img {
 }
 
 /* General text styling using Google fonts */
-h1.header {
+.header {
     font-family: 'Lato', serif;
     font-size: 64px;
     font-weight: bold;
     margin-left: 5vw;
 }
 
-h4.section-title {
+.section-title {
     font-family: 'Lato', serif;
     font-size: 48px;
     margin-bottom: 20px;
@@ -172,7 +175,7 @@ hr {
 /* Styling for social media links using Ionicons */
 ul.links {
     list-style-type: none;
-    margin: 0;
+    margin-top: 20px;
     padding: 0;
 }
 
@@ -183,7 +186,7 @@ ul.links li {
 
 ul.links ion-icon {
     color: #0d2e54;
-    font-size: 32px;
+    font-size: 48px;
 }
 
 ul.links ion-icon:hover {
