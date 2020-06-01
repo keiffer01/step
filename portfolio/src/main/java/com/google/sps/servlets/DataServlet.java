@@ -30,12 +30,11 @@ public class DataServlet extends HttpServlet {
     response.setContentType("text/html;");
 
     if (name == null) {
-        response.getWriter().println("<h1>Oops, I don't know what your name is.</h1>");
+        response.getWriter().println("<h1>Oops, looks like you didn't give anything.</h1>");
+    } else if (!name.matches("^[A-Za-z0-9 ]*$")){
+        response.getWriter().println("<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
     } else {
         response.getWriter().println("<h1>Hello " + name + "!</h1>");
     }
-
-    
-    
   }
 }
