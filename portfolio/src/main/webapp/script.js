@@ -21,7 +21,7 @@
  *          the facts array is empty, the "generate-fact" container is removed.
  */
 function getRandomFact() {
-  fetch('/data').then(response => response.text()).then((fact) => {
+  fetch('/facts').then(response => response.text()).then((fact) => {
     document.getElementById('facts').innerText = fact;
   });
 }
