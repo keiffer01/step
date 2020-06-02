@@ -25,14 +25,19 @@ import javax.servlet.http.HttpServletResponse;
 public class DataServlet extends HttpServlet {
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) 
+    throws IOException {
     String name = request.getParameter("name");
     response.setContentType("text/html;");
+    // Regex that accepts letters, numbers, and spaces
+    String regex = "^[A-Za-z0-9 ]*$";
 
     if (name == null) {
-        response.getWriter().println("<h1>Oops, looks like you didn't give anything.</h1>");
-    } else if (!name.matches("^[A-Za-z0-9 ]*$")){
-        response.getWriter().println("<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
+        response.getWriter().println(
+          "<h1>Oops, looks like you didn't give anything.</h1>");
+    } else if (!name.matches(regex)){
+        response.getWriter().println(
+          "<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
     } else {
         response.getWriter().println("<h1>Hello " + name + "!</h1>");
     }
