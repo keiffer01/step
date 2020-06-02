@@ -21,12 +21,16 @@
  *          the facts array is empty, the "generate-fact" container is removed.
  */
 let getRandomFact = (function() {
-    const facts = ["hello", "world"];
+    const facts = ["Some of my friends call me by the nickname \"Puffball\" due to my hair's tendency to get poofy.", 
+                   "I'm confident that I've played at least 1 video game from every Nintendo video game series.",
+                   "Despite being Filipino, I can barely speak any. :( Trying to practice though so that one day...!",
+                   "Although I listen to Pop most of the time, my guilty pleasure music are video game OSTs. Yoko Shimomura is just too good of a composer.",
+                   "One of the career paths I once considered was being a writer."];
     return function() {
         if (facts.length == 0) {
             const factContainer = document.getElementById("facts");
             const generatorContainer = document.getElementById("generate-fact");
-            factContainer.innerText = "Empty!";
+            factContainer.innerText = "Sorry, looks like that's all I've got. Maybe I'll update this with some more in the future.";
             generatorContainer.parentNode.removeChild(generatorContainer);
         }
         else {
