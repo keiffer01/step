@@ -7,12 +7,15 @@
     <meta name="description" content="My Portfolio">
     <title>Keiffer Acoba | Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:bold|Roboto+Slab">
   </head>
 
   <body>
+    <!-- Portfolio title header -->
+    <h1 class="header">Portfolio</h1>
 
     <!-- Navbar -->
-    <nav id="navbar">
+    <nav>
       <ul>
         <li><a href="index.html">About</a></li>
         <li><a href="#" id="here">Portfolio</a></li>
@@ -21,24 +24,49 @@
     </nav>
 
     <!-- This website -->
-    <section id="website" class="two-columns">
-      <div class="column left">
+    <section class="two-columns">
+      <div class="left">
         <img src="images/google.svg" alt="Google Logo">
       </div>
-      <div class="column right">
-        <h3 class="header">This Website</h3>
-        <p>Lorem ipsum blah blah put info hereeeeeeee</p>
+      <div class="right">
+        <h4 class="section-title">This Website</h3>
+        <p>
+          This website was created as part of training during Google's 2020
+          STEP Summer internship. It was created completely from scratch
+          without the use of any frameworks. Currently, I'd still consider
+          it a work-in-progress and will likely continue to add to and update
+          it throughout the future.
+        </p>
+        <p>
+          Checkout the project's 
+          <a href="https://github.com/keiffer01/step">Github repo</a>.
+        </p>
       </div>
     </section>
 
+    <hr>
+
     <!-- PointMe -->
-    <section id="pointme" class="two-columns">
-      <div class="column left">
-        <img src="images/pointme.png" alt="Google Logo">
+    <section class="two-columns">
+      <div class="left">
+        <img src="images/pointme.png" alt="PointMe Logo">
       </div>
-      <div class="column right">
-        <h3 class="header">PointMe</h3>
-        <p>Lorem ipsum blah blah put info hereeeeeeee</p>
+      <div class="right">
+        <h4 class="section-title">PointMe</h3>
+        <p>
+          PointMe is a project created by a team of 4 in the HackCMU 2019
+          hackathon, winning 2nd place overall. Having suffered with the
+          workings of managing memory in C and growing frustrated with the
+          cryptic messages being returned by valgrind, we wrote PointMe as a
+          visual debugger to show you where on the stack and the heap variables
+          were located, as well as which pointers referenced what. I contributed
+          to part of the project that involved parsing the contents of the .c
+          file before passing them on to the frontend.
+        </p>
+        <p>
+          Checkout more info at the project's
+          <a href="https://devpost.com/software/pointme-7im4b0">Devpost listing</a>.
+        </p>
       </div>
     </section>
 
@@ -47,12 +75,9 @@
       <div id="facts">Wanna learn more about me?</div>
       <div id="generate-fact">Click <button onclick="getRandomFact()">here</button> for a random fun fact!</div>
     </footer>
-
-    <!-- Get Ionicons -->
-    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
-
   </body>
 
+  <!-- Import script.js -->
   <script src="script.js"></script>
 
 </html>
