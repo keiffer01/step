@@ -27,25 +27,30 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
-  private List<String> comments;
-
-  /* Initializes comments list with hard-coded data for now. */
-  @Override
-  public void init() {
-    comments = new ArrayList<>();
-    comments.add("Hello");
-    comments.add("World");
-  }
+  private List<String> comments = new ArrayList<>();
 
   /* Returns comments as a JSON string. */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
     // Convert comments to JSON using Gson
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
+    String json = new Gson().toJson(comments);
 
     // Send json as the response
     response.setContentType("application/json;");
     response.getWriter().println(json);
   }
+
+  /* Stores given comment in the comments ArrayList */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
+      String comment = request.getParameter("comment-input");
+      if (!(comment == null || comment.isEmpty())) {
+        comments.add(comment);
+      }
+
+      // Redirect back to comments.html
+      response.sendRedirect("/comments.html");
+    }
 }
