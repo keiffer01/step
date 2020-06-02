@@ -13,26 +13,15 @@
 // limitations under the License.
 
 /*
- * Returns a random fun fact about me until all facts are exhausted.
+ * Returns a random fun fact about me.
  * 
  * REQUIRES: none
  * ENSURES: The "facts" container is replaced with a randomly chosen fun fact as
  *          defined in the facts array, and that fact is removed from facts. If
  *          the facts array is empty, the "generate-fact" container is removed.
  */
-let getRandomFact = (function() {
-    const facts = ["hello", "world"];
-    return function() {
-        if (facts.length == 0) {
-            const factContainer = document.getElementById("facts");
-            const generatorContainer = document.getElementById("generate-fact");
-            factContainer.innerText = "Empty!";
-            generatorContainer.parentNode.removeChild(generatorContainer);
-        }
-        else {
-            const fact = facts.splice(Math.floor(Math.random() * facts.length), 1);
-            const factContainer = document.getElementById("facts");
-            factContainer.innerText = fact;
-        }
-    }
-})();
+function getRandomFact() {
+  fetch('/data').then(response => response.text()).then((fact) => {
+    document.getElementById('facts').innerText = fact;
+  });
+}
