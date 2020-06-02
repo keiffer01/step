@@ -36,7 +36,7 @@ public class DataServlet extends HttpServlet {
     if (name == null) {
         response.getWriter().println(
           "<h1>Oops, looks like you didn't give anything.</h1>");
-    } else if (!name.matches(ALPHANUMERIC_WITH_SPACES)){
+    } else if (!name.matches(ALPHANUMERIC_WITH_SPACES)) {
         response.getWriter().println(
           "<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
     } else {
