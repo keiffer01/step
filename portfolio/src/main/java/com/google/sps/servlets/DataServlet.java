@@ -24,13 +24,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  // Regex that accepts letters, numbers, and spaces
+  private static final String regex = "^[A-Za-z0-9 ]*$";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
     throws IOException {
     String name = request.getParameter("name");
     response.setContentType("text/html;");
-    // Regex that accepts letters, numbers, and spaces
-    String regex = "^[A-Za-z0-9 ]*$";
 
     if (name == null) {
         response.getWriter().println(
