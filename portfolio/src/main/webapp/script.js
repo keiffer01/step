@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /*
- * Returns a random fun fact about me.
+ * Returns a random fun fact about me from the /facts servlet.
  * 
  * REQUIRES: none
  * ENSURES: The "facts" container is replaced with a randomly chosen fun fact as
@@ -23,5 +23,17 @@
 function getRandomFact() {
   fetch('/facts').then(response => response.text()).then((fact) => {
     document.getElementById('facts').innerText = fact;
+  });
+}
+
+/*
+ * Returns comments from the /comments servlet.
+ *
+ * REQUIRES: none
+ * ENSURES:
+ */
+function getComments() {
+  fetch('/comments').then(response => response.json()).then((comments) => {
+    document.getElementById('comments-container').innerText = comments.toString();
   });
 }
