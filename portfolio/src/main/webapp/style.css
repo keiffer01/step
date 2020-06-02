@@ -1,126 +1,220 @@
+/* Top margin for navbar and off-white background */
+body {
+  padding-top: 40px;
+}
+
 /* Navbar styling */
 nav {
-    background-color: #859ecc;
-    opacity: 95%;
-    overflow: hidden;
-    z-index: 1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
+  background-color: #859ecc;
+  left: 0;
+  opacity: 95%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
 }
 
 /* Sets up list of links to be centered in the navbar */
 nav ul {
-    height: 3em;
-    width: 600px;
-    margin: 0 auto;
-    list-style: none;
+  height: 3em;
+  list-style: none;
+  margin: 0 auto;
+  width: 600px;
 }
 
 nav li {
-    float: left;
+  float: left;
 }
 
 /* Style navbar links */
 nav a {
-    display: block;
-    text-align: center;
-    color: #0d224a;
-    height: 3em;
-    line-height: 3em;
-    width: 200px;
-    text-decoration: none;
-    margin-left: -2px;
-    font-family: 'Lato';
+  color: #0d224a;
+  display: block;
+  font-family: 'Lato', serif;
+  font-size: 24px;
+  height: 3em;
+  line-height: 3em;
+  margin-left: -2px;
+  text-align: center;
+  text-decoration: none;
+  width: 200px;
 }
 
 nav a:hover {
-    background: #0d224a;
-    color: #859ecc;
+  background: #0d224a;
+  color: #859ecc;
 }
 
 /* About page intro styling */
-#intro {
-	font-family: 'Lato', serif;
-	font-weight: bold;
-	color: #05072e;
-	height: 100vh;
-	width: 100%;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+.intro {
+  align-items: center;
+  color: #0d1169;
+  display: flex;
+  font-family: 'Lato', serif;
+  font-weight: bold;
+  height: 100vh;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
 }
 
-#intro .block {
-	display: inline-block;
-	vertical-align: middle;
-	text-align: left;
+.intro div {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
 }
 
 /* Animations for the intro*/
 @keyframes fade-in-top {
-	from {opacity: 0%; bottom: 25px;}
-	to {opacity: 100%; bottom: 0px;}
+  from {bottom: 25px; opacity: 0;}
+  to {bottom: 0; opacity: 100%;}
 }
 
 @keyframes fade-in-bottom {
-	0% {opacity: 0%;}
-	66% {opacity: 0%; top: 25px;}
-	100% {opacity: 100%; top: 0px;}
+  0% {opacity: 0;}
+  66% {opacity: 0; top: 25px;}
+  100% {opacity: 100%; top: 0;}
 }
 
 /* Fine-tune each section of the intro */
 #hi {
-	font-size: 48px;
-	line-height: 5%;
-	position: relative;
-	animation: fade-in-top 1s ease;
+  font-size: 48px;
+  line-height: 5%;
+  position: relative;
+  animation: fade-in-top 1s ease;
 }
 
 #name {
-	font-size: 96px;
-	line-height: 15%;
-	position: relative;
-	animation: fade-in-top 1s ease;
+  font-size: 96px;
+  line-height: 15%;
+  position: relative;
+  animation: fade-in-top 1s ease;
 }
 
 #blurb {
-	font-size: 24px;
-	color: #4b4d6b;
-	position: relative;
-	animation: fade-in-bottom 3s ease;
+  font-size: 24px;
+  color: #4b4d6b;
+  position: relative;
+  animation: fade-in-bottom 3s ease;
 }
 
-/* General styling for two-column sections */
 .two-columns {
-	display: table;
-	width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 40px;
 }
 
-.column {
-	display: table-cell;
+/* Left columns should have an image */
+.two-columns div.left {
+  text-align: center;
+  vertical-align: middle;
 }
 
-.left {
-	margin-left: 20%;
+/* Right columns should have text description */
+.two-columns div.right {
+  flex-basis: 50%;
+  text-align: left;
 }
 
-.right {
-	vertical-align: top;
-	text-align: left;
-}
-
-/* If the browser window is smaller than 600px, make the columns stack on top of each other */
-@media only screen and (max-width: 600px) {
-  .column {
-    display: block;
-    width: 100%;
+/* If the browser window is small, make the columns stack on top of each other and
+ * add margins to right columns and header
+ */
+@media only screen and (max-width: 900px) {
+  .two-columns {
+    flex-direction: column;
+  }
+  .right {
+    margin: 40px 10vw;
+  }
+  .header {
+    margin-bottom: 40px;
   }
 }
 
 img {
-	width: 400px;
-	max-width: 100%;
+  max-width: 100%;
+  width: 350px;
+}
+
+/* Make image of me rounded and add shadow */
+#me {
+  border-radius: 50%;
+  box-shadow: -5px 10px 10px #232529;
+}
+
+/* General text styling using Google fonts */
+.header {
+  color: #0d1169;
+  font-family: 'Lato', serif;
+  font-size: 64px;
+  font-weight: bold;
+  margin-left: 5vw;
+}
+
+.section-title {
+  color: #0d1169;
+  font-family: 'Lato', serif;
+  font-size: 48px;
+  margin-bottom: 20px;
+  padding-left: 40px;
+}
+
+p {
+  color: #05072e;
+  font-family: "Roboto Slab", serif;
+  font-size: 20px;
+}
+
+p a {
+  text-decoration: none;
+}
+
+hr {
+  border: 0;
+  background-color: #adaeb8;
+  color: #adaeb8;
+  height: 2px;
+  width: 60%;
+}
+
+/* Styling for social media links using Ionicons */
+ul.links {
+  list-style-type: none;
+  margin-top: 20px;
+  padding: 0;
+}
+
+ul.links li {
+  display: inline-block;
+}
+
+ul.links ion-icon {
+  color: #0d2e54;
+  font-size: 48px;
+}
+
+ul.links ion-icon:hover {
+  color: #2f73c2;
+}
+
+footer {
+  background-color: #859ecc;
+  color: #0d224a;
+  font-family: 'Roboto Slab', serif;
+  font-size: 20px;
+  padding: 16px;
+}
+
+footer button {
+  background-color: inherit;
+  border: none;
+  color: #1e5a9e;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  outline: none;
+  padding: 0;
 }
