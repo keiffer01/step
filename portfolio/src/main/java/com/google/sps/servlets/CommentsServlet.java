@@ -41,11 +41,10 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Convert comments to JSON using Gson
-    Gson gson = new Gson();
-    String json = gson.toJson(comments);
+    String commentsInJson = new Gson().toJson(comments);
 
     // Send json as the response
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(commentsInJson);
   }
 }
