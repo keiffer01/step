@@ -24,9 +24,23 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+  // Regex that accepts letters, numbers, and spaces
+  private static final String ALPHANUMERIC_WITH_SPACES = "^[A-Za-z0-9 ]*$";
+
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) 
+    throws IOException {
+    String name = request.getParameter("name");
     response.setContentType("text/html;");
-    response.getWriter().println("<h1>Hello world!</h1>");
+
+    if (name == null) {
+        response.getWriter().println(
+          "<h1>Oops, looks like you didn't give anything.</h1>");
+    } else if (!name.matches(ALPHANUMERIC_WITH_SPACES)) {
+        response.getWriter().println(
+          "<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
+    } else {
+        response.getWriter().println("<h1>Hello " + name + "!</h1>");
+    }
   }
 }
