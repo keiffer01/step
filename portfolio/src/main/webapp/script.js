@@ -30,10 +30,25 @@ function getRandomFact() {
  * Returns comments from the /comments servlet.
  *
  * REQUIRES: none
- * ENSURES:
+ * ENSURES: The "comments-container" div container is replaced with the comments
+ *          stored in the "/comments" servlet as a comma-separated string. If the
+ *          server returns an error, a nondescript error message is displayed instead.
  */
 function getComments() {
-  fetch('/comments').then(response => response.json()).then((comments) => {
-    document.getElementById('comments-container').innerText = comments.toString();
+  fetch('/comments')
+    .then(handleFetchErrors)
+    .then(response => response.json())
+    .then(commentsInJson => {
+      document.getElementById('comments-container').innerText =
+        commentsInJson.toString();
+  }).catch(error => {
+      document.getElementById('facts').innerText = error;
   });
 }
+
+function handleFetchErrors(response) {
+  if (!response.ok) {
+    throw "Looks like something went wrong, you can try again.";
+  }
+  return response;
+} 
