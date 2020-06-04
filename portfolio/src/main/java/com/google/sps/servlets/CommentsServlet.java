@@ -33,8 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
-  private List<String> comments = new ArrayList<>();
-
   /* Returns comments as a JSON string. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,11 +50,22 @@ public class CommentsServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException {
       String comment = request.getParameter("comment-input");
-      if (!(comment == null || comment.isEmpty())) {
-        comments.add(comment);
-      }
+      long timestamp = System.currentTimeMillis();
 
-      // Redirect back to comments.html
+      // Do not store the comment if it is empty or null
+      if (comment == null || comment.isEmpty()) {
+        response.sendRedirect("/comments.html");
+        return;
+      }
+      
+      // Create new entity for the comment and store in Datastore
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("comment", comment);
+      commentEntity.setProperty("timestamp", timestamp);
+
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
+
       response.sendRedirect("/comments.html");
     }
 }
