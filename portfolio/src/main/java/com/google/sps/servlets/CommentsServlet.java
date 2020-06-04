@@ -35,37 +35,47 @@ public class CommentsServlet extends HttpServlet {
 
   /* Returns comments as a JSON string. */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Obtain and prepare comments from Datastore
+    Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
+
+    // Loop through each Comment entity and store in an ArrayList
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : commentsPrepared.asIterable()) {
+      String comment = (String) entity.getProperty("comment");
+      comments.add(comment);
+    }
+
     // Convert comments to JSON using Gson
-    String json = new Gson().toJson(comments);
+    String commentsInJson = new Gson().toJson(comments);
 
     // Send json as the response
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(commentsInJson);
   }
 
   /* Stores given comment in the comments ArrayList */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
-      String comment = request.getParameter("comment-input");
-      long timestamp = System.currentTimeMillis();
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter("comment-input");
+    long timestamp = System.currentTimeMillis();
 
-      // Do not store the comment if it is empty or null
-      if (comment == null || comment.isEmpty()) {
-        response.sendRedirect("/comments.html");
-        return;
-      }
-      
-      // Create new entity for the comment and store in Datastore
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("comment", comment);
-      commentEntity.setProperty("timestamp", timestamp);
-
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(commentEntity);
-
+    // Do not store the comment if it is empty or null
+    if (comment == null || comment.isEmpty()) {
       response.sendRedirect("/comments.html");
+      return;
     }
+
+    // Create new entity for the comment and store in Datastore
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", comment);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+
+    response.sendRedirect("/comments.html");
+  }
 }
