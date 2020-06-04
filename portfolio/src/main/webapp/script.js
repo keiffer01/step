@@ -39,7 +39,8 @@ function getComments() {
     .then(handleFetchErrors)
     .then(response => response.json())
     .then(commentsInJson => {
-      document.getElementById('comments-container').innerText = commentsInJson.toString();
+      document.getElementById('comments-container').innerText =
+        commentsInJson.toString();
   }).catch(error => {
       document.getElementById('facts').innerText = error;
   });
