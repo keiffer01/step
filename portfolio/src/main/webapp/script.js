@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /*
- * Returns a random fun fact about me.
+ * Returns a random fun fact about me from the /facts servlet.
  * 
  * REQUIRES: none
  * ENSURES: The "facts" container is replaced with a randomly chosen fun fact as
@@ -21,14 +21,29 @@
  *          the facts array is empty, the "generate-fact" container is removed.
  */
 function getRandomFact() {
-  fetch('/data')
+  fetch('/facts').then(response => response.text()).then((fact) => {
+    document.getElementById('facts').innerText = fact;
+  });
+}
+
+/*
+ * Returns comments from the /comments servlet.
+ *
+ * REQUIRES: none
+ * ENSURES: The "comments-container" div container is replaced with the comments
+ *          stored in the "/comments" servlet as a comma-separated string. If the
+ *          server returns an error, a nondescript error message is displayed instead.
+ */
+function getComments() {
+  fetch('/comments')
     .then(handleFetchErrors)
-    .then(response => response.text())
-    .then(fact => {
-      document.getElementById('facts').innerText = fact;
+    .then(response => response.json())
+    .then(commentsInJson => {
+      document.getElementById('comments-container').innerText =
+        commentsInJson.toString();
   }).catch(error => {
       document.getElementById('facts').innerText = error;
-  })
+  });
 }
 
 function handleFetchErrors(response) {
@@ -36,4 +51,4 @@ function handleFetchErrors(response) {
     throw "Looks like something went wrong, you can try again.";
   }
   return response;
-}
+} 

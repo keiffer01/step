@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+/** Servlet that returns fun facts. */
+@WebServlet("/facts")
+public class FactsServlet extends HttpServlet {
 
   // List of fun facts 
   private List<String> facts;
