@@ -37,17 +37,21 @@ public class FactsServlet extends HttpServlet {
   public void init() {
     currQuestionIndex = 0;
     facts = new ArrayList<>();
-    facts.add("Some of my friends call me by the nickname \"Puffball\" due to "
-              + "my hair's tendency to get poofy.");
-    facts.add("I'm confident that I've played at least 1 video game from every "
-              + "Nintendo video game series.");
-    facts.add("Despite being Filipino, I can barely speak any. :( "
-              + "Trying to practice though so that one day...!");
-    facts.add("Although I listen to Pop most of the time, my guilty pleasure "
-               + "music are video game OSTs. Yoko Shimomura is just too good "
-               + "of a composer.");
+    facts.add(
+        "Some of my friends call me by the nickname \"Puffball\" due to "
+            + "my hair's tendency to get poofy.");
+    facts.add(
+        "I'm confident that I've played at least 1 video game from every "
+            + "Nintendo video game series.");
+    facts.add(
+        "Despite being Filipino, I can barely speak any. :( "
+            + "Trying to practice though so that one day...!");
+    facts.add(
+        "Although I listen to Pop most of the time, my guilty pleasure "
+            + "music are video game OSTs. Yoko Shimomura is just too good "
+            + "of a composer.");
     facts.add("One of the career paths I once considered was being a writer.");
-    
+
     Collections.shuffle(facts);
   }
 
