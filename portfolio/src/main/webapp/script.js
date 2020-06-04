@@ -13,30 +13,27 @@
 // limitations under the License.
 
 /*
- * Returns a random fun fact about me until all facts are exhausted.
+ * Returns a random fun fact about me.
  * 
  * REQUIRES: none
  * ENSURES: The "facts" container is replaced with a randomly chosen fun fact as
  *          defined in the facts array, and that fact is removed from facts. If
  *          the facts array is empty, the "generate-fact" container is removed.
  */
-let getRandomFact = (function() {
-    const facts = ["Some of my friends call me by the nickname \"Puffball\" due to my hair's tendency to get poofy.", 
-                   "I'm confident that I've played at least 1 video game from every Nintendo video game series.",
-                   "Despite being Filipino, I can barely speak any. :( Trying to practice though so that one day...!",
-                   "Although I listen to Pop most of the time, my guilty pleasure music are video game OSTs. Yoko Shimomura is just too good of a composer.",
-                   "One of the career paths I once considered was being a writer."];
-    return function() {
-        if (facts.length == 0) {
-            const factContainer = document.getElementById("facts");
-            const generatorContainer = document.getElementById("generate-fact");
-            factContainer.innerText = "Sorry, looks like that's all I've got. Maybe I'll update this with some more in the future.";
-            generatorContainer.parentNode.removeChild(generatorContainer);
-        }
-        else {
-            const fact = facts.splice(Math.floor(Math.random() * facts.length), 1);
-            const factContainer = document.getElementById("facts");
-            factContainer.innerText = fact;
-        }
-    }
-})();
+function getRandomFact() {
+  fetch('/data')
+    .then(handleFetchErrors)
+    .then(response => response.text())
+    .then(fact => {
+      document.getElementById('facts').innerText = fact;
+  }).catch(error => {
+      document.getElementById('facts').innerText = error;
+  })
+}
+
+function handleFetchErrors(response) {
+  if (!response.ok) {
+    throw "Looks like something went wrong, you can try again.";
+  }
+  return response;
+}

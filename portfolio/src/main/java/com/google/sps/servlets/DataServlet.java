@@ -15,6 +15,9 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -24,23 +27,43 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  // Regex that accepts letters, numbers, and spaces
-  private static final String ALPHANUMERIC_WITH_SPACES = "^[A-Za-z0-9 ]*$";
+  // List of fun facts 
+  private List<String> facts;
+  // Pointer to the current index of facts given when the servlet is called
+  private int currQuestionIndex;
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) 
-    throws IOException {
-    String name = request.getParameter("name");
-    response.setContentType("text/html;");
+  public void init() {
+    // Initializes currQuestionIndex and the facts list
+    currQuestionIndex = 0;
+    facts = new ArrayList<>();
+    facts.add("Some of my friends call me by the nickname \"Puffball\" due to "
+              + "my hair's tendency to get poofy.");
+    facts.add("I'm confident that I've played at least 1 video game from every "
+              + "Nintendo video game series.");
+    facts.add("Despite being Filipino, I can barely speak any. :( "
+              + "Trying to practice though so that one day...!");
+    facts.add("Although I listen to Pop most of the time, my guilty pleasure "
+               + "music are video game OSTs. Yoko Shimomura is just too good "
+               + "of a composer.");
+    facts.add("One of the career paths I once considered was being a writer.");
+    
+    Collections.shuffle(facts);
+  }
 
-    if (name == null) {
-        response.getWriter().println(
-          "<h1>Oops, looks like you didn't give anything.</h1>");
-    } else if (!name.matches(ALPHANUMERIC_WITH_SPACES)) {
-        response.getWriter().println(
-          "<h1>Sorry, I only accept letters, numbers, and spaces.</h1>");
-    } else {
-        response.getWriter().println("<h1>Hello " + name + "!</h1>");
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    /* When the pointer exceeds the size of the facts list (or somehow becomes
+     * negative), reset currQuestionIndex and reshuffle the facts list. */
+    if (currQuestionIndex >= facts.size() || currQuestionIndex < 0) {
+      currQuestionIndex = 0;
+      Collections.shuffle(facts);
     }
+
+    String fact = facts.get(currQuestionIndex);
+    currQuestionIndex++;
+
+    response.setContentType("text/html;");
+    response.getWriter().println(fact);
   }
 }
