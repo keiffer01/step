@@ -35,15 +35,23 @@ function getRandomFact() {
  *          server returns an error, a nondescript error message is displayed instead.
  */
 function getComments() {
-  fetch('/comments')
+  const maxComments = document.getElementById("max-comments").value;
+  
+  // Append value of maxComments to the fetch request
+  fetch('/comments?max-comments='.concat(parseInt(maxComments)))
     .then(handleFetchErrors)
     .then(response => response.json())
     .then(commentsInJson => {
+      // Display returned comments
       document.getElementById('comments-container').innerText =
         commentsInJson.toString();
   }).catch(error => {
-      document.getElementById('facts').innerText = error;
+      // Display generic error message in case of server error
+      document.getElementById('comments-container').innerText = error;
   });
+
+  // Prevent page reload
+  return false;
 }
 
 function handleFetchErrors(response) {

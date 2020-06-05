@@ -34,8 +34,15 @@
 
     <!-- Comments container -->
     <div id="comments">
-      <p>Click the button to grab comments:</p>
-      <button onclick="getComments()">Get comments</button>
+      <form onsubmit="return getComments()">
+        <label for="max-comments">
+          Specify the number of most recent comments you would like to see
+          (between 1 and 10):
+        </label>
+        <input type="number" id="max-comments" name="max-comments" min="1"
+          max="10" value="5">
+        <input type="submit" value="Get comments">
+      </form>
       <div id="comments-container"></div>
     </div>
 
