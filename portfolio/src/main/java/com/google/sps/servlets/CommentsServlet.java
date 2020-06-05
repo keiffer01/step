@@ -34,11 +34,15 @@ public class CommentsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException {
     // Convert comments to JSON using Gson
+<<<<<<< HEAD
     String json = new Gson().toJson(comments);
+=======
+    String commentsInJson = new Gson().toJson(comments);
+>>>>>>> master
 
     // Send json as the response
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(commentsInJson);
   }
 
   /* Stores given comment in the comments ArrayList */

@@ -27,14 +27,14 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/facts")
 public class FactsServlet extends HttpServlet {
 
-  /* List of fun facts */
+  // List of fun facts 
   private List<String> facts;
-  /* Pointer to the current index of facts given when the servlet is called */
+  // Pointer to the current index of facts given when the servlet is called
   private int currQuestionIndex;
 
-  /* Initializes facts list and currQuestionIndex */
   @Override
   public void init() {
+    // Initializes currQuestionIndex and the facts list
     currQuestionIndex = 0;
     facts = new ArrayList<>();
     facts.add("Some of my friends call me by the nickname \"Puffball\" due to "
@@ -54,7 +54,7 @@ public class FactsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     /* When the pointer exceeds the size of the facts list (or somehow becomes
-     * negative), reset currQuestionIndex and reshuffle the facts list */
+     * negative), reset currQuestionIndex and reshuffle the facts list. */
     if (currQuestionIndex >= facts.size() || currQuestionIndex < 0) {
       currQuestionIndex = 0;
       Collections.shuffle(facts);
