@@ -23,18 +23,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns fun facts. */
+/** 
+ * Servlet that stores and returns fun facts.
+ */
 @WebServlet("/facts")
 public class FactsServlet extends HttpServlet {
 
-  // List of fun facts 
+  // List of fun facts.
   private List<String> facts;
-  // Pointer to the current index of facts given when the servlet is called
+  // Pointer to the current index of facts given when the servlet is called.
   private int currQuestionIndex;
 
+  /** 
+   * Initializes currQuestionIndex and facts list on servlet startup.
+   */
   @Override
   public void init() {
-    // Initializes currQuestionIndex and the facts list
     currQuestionIndex = 0;
     facts = new ArrayList<>();
     facts.add("Some of my friends call me by the nickname \"Puffball\" due to "
@@ -51,10 +55,17 @@ public class FactsServlet extends HttpServlet {
     Collections.shuffle(facts);
   }
 
+  /** 
+   * On GET request, writes to response a psuedo-randomly chosen fun fact from the facts list.
+   * "Psuedo-random" in that currQuestionIndex points to the next fun fact to write, and reshuffles
+   * the facts list when currQuestionIndex reaches its length.
+   * @param request The request made by the connecting client.
+   * @param response The response that is sent back to the client.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    /* When the pointer exceeds the size of the facts list (or somehow becomes
-     * negative), reset currQuestionIndex and reshuffle the facts list. */
+    // When the pointer exceeds the size of the facts list (or somehow becomes
+    // negative), reset currQuestionIndex and reshuffle the facts list.
     if (currQuestionIndex >= facts.size() || currQuestionIndex < 0) {
       currQuestionIndex = 0;
       Collections.shuffle(facts);
