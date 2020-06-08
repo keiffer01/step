@@ -49,6 +49,17 @@ function getComments() {
 }
 
 /**
+ * Deletes the given comment from the datastore.
+ * 
+ * @param {String} comment The comment to be deleted.
+ */
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('comment', comment);
+  fetch("/delete-comment", {method: "POST", body:params});
+}
+
+/**
  * Returns the response if its HTTP status code is successful as given by its
  * "ok" flag. If not, throws a generic error message.
  * 
