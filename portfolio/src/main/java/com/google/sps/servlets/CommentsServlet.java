@@ -29,7 +29,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that stores comments. */
+/** 
+ * Servlet that stores and returns comments.
+ */
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
@@ -51,12 +53,16 @@ public class CommentsServlet extends HttpServlet {
     // Convert comments to JSON using Gson
     String commentsInJson = new Gson().toJson(comments);
 
-    // Send json as the response
+    // Send json as the response.
     response.setContentType("application/json;");
     response.getWriter().println(commentsInJson);
   }
 
-  /* Stores given comment in the comments ArrayList */
+  /** 
+   * On POST request, stores given comment in the comments ArrayList.
+   * @param request The request made by the connecting client.
+   * @param response The response that is sent back to the client.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter("comment-input");
