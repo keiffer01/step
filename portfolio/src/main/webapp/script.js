@@ -49,17 +49,6 @@ function getComments() {
 }
 
 /**
- * Deletes the given comment from the datastore.
- * 
- * @param {String} comment The comment to be deleted.
- */
-function deleteComment(comment) {
-  const params = new URLSearchParams();
-  params.append('comment', comment);
-  fetch("/delete-comment", {method: "POST", body:params});
-}
-
-/**
  * Returns the response if its HTTP status code is successful as given by its
  * "ok" flag. If not, throws a generic error message.
  * 
@@ -76,17 +65,18 @@ function handleFetchErrors(response) {
  * Create a new list item element containing text of the given comment and a
  * button to delete it.
  * 
- * @param {string} comment The comment to be added as text to the list item.
+ * @param {JSON} comment JSON containing the comment id, text, and timestamp.
  * @returns {HTMLLIElement} The list item to append to the comments list.
  */
 function createCommentListItem(comment) {
+  console.log(comment);
   // Create the list item
   const listItem = document.createElement("li");
   listItem.className = "comment";
 
   // Create the comment text to put into the list item
   const listText = document.createElement("span");
-  listText.innerText = comment;
+  listText.innerText = comment.text;
 
   // Create the delete button to put into the list item
   const deleteButton = document.createElement("button");
@@ -99,4 +89,15 @@ function createCommentListItem(comment) {
   listItem.appendChild(listText);
   listItem.appendChild(deleteButton);
   return listItem;
+}
+
+/**
+ * Deletes the given comment from the datastore.
+ * 
+ * @param {JSON} comment The comment to be deleted.
+ */
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append("id", comment.id);
+  fetch("/delete-comment", {method: "POST", body: params});
 }

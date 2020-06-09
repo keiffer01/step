@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,16 +58,21 @@ public class CommentsServlet extends HttpServlet {
 
     // Loop through each Comment entity until all comments are seen or until the max number of
     // comments have been reached, and store in an ArrayList.
-    List<String> comments = new ArrayList<>();
+    List<Comment> comments = new ArrayList<>();
+    Iterator<Entity> commentsIterator = commentsPrepared.asIterable().iterator();
     int countComments = 0;
-    for (Entity entity : commentsPrepared.asIterable()) {
-      String comment = (String) entity.getProperty("comment");
+    Entity entity;
+    while (commentsIterator.hasNext() || countComments >= maxComments) {
+      entity = commentsIterator.next();
+
+      long id = entity.getKey().getId();
+      String text = (String) entity.getProperty("text");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+      Comment comment = new Comment(id, text, timestamp);
       comments.add(comment);
 
       countComments++;
-      if (countComments >= maxComments) {
-        break;
-      }
     }
 
     // Convert comments to JSON using Gson
@@ -78,24 +84,24 @@ public class CommentsServlet extends HttpServlet {
   }
 
   /** 
-   * On POST request, stores given comment in the comments ArrayList.
+   * On POST request, stores given comment in the the datastore.
    * @param request The request made by the connecting client.
    * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter("comment-input");
+    String text = request.getParameter("comment-text");
     long timestamp = System.currentTimeMillis();
 
-    // Do not store the comment if it is empty or null
-    if (comment == null || comment.isEmpty()) {
+    // Do not store the comment if it the text is empty or null
+    if (text == null || text.isEmpty()) {
       response.sendRedirect("/comments.html");
       return;
     }
 
     // Create new entity for the comment and store in Datastore
     Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("comment", comment);
+    commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
