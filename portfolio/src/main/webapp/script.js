@@ -69,7 +69,6 @@ function handleFetchErrors(response) {
  * @returns {HTMLLIElement} The list item to append to the comments list.
  */
 function createCommentListItem(comment) {
-  console.log(comment);
   // Create the list item
   const listItem = document.createElement("li");
   listItem.className = "comment";
