@@ -17,8 +17,8 @@
  * footer.
  */
 function getRandomFact() {
-  fetch('/facts').then(response => response.text()).then((fact) => {
-    document.getElementById('facts').innerText = fact;
+  fetch("/facts").then(response => response.text()).then((fact) => {
+    document.getElementById("facts").innerText = fact;
   });
 }
 
@@ -28,10 +28,7 @@ function getRandomFact() {
  * instead.
  */
 function getComments() {
-  const maxComments = document.getElementById("max-comments").value;
-  
-  // Append value of maxComments to the fetch request
-  fetch('/comments?max-comments='.concat(parseInt(maxComments)))
+  fetch("/get-comments")
     .then(handleFetchErrors)
     .then(response => response.json())
     .then(commentsInJson => {
@@ -41,11 +38,8 @@ function getComments() {
       })
     }).catch(error => {
       // Display generic error message in case of server error
-      document.getElementById('comments-list').innerText = error;
+      document.getElementById("comments-list").innerText = error;
   });
-
-  // Prevent page reload
-  return false;
 }
 
 /**

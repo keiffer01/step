@@ -33,8 +33,8 @@ import javax.servlet.http.HttpServletResponse;
 /** 
  * Servlet that stores and returns comments.
  */
-@WebServlet("/comments")
-public class CommentsServlet extends HttpServlet {
+@WebServlet("/get-comments")
+public class GetCommentsServlet extends HttpServlet {
 
   // The max number of comments to send on a GET request. Is modified on POST request.
   private int maxComments = 5;
@@ -50,13 +50,6 @@ public class CommentsServlet extends HttpServlet {
     Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
-
-    // Get maxComments query and check it is valid.
-    if (maxComments == -1) {
-      response.setContentType("text/html");
-      response.getWriter().println("Please enter an integer between 1 and 10.");
-      return;
-    }
 
     // Loop through each Comment entity until all comments are seen or until the max number of
     // comments have been reached, and store in an ArrayList.
@@ -86,7 +79,7 @@ public class CommentsServlet extends HttpServlet {
   }
 
   /** 
-   * On POST request, stores given comment in the the datastore.
+   * On POST request, modifies the maximum number of comments to send.
    * @param request The request made by the connecting client.
    * @param response The response that is sent back to the client.
    */
@@ -98,9 +91,15 @@ public class CommentsServlet extends HttpServlet {
     }
 
     maxComments = maxCommentsRequest;
+    response.sendRedirect("/comments.html");
   }
 
-  /* Returns the value of maximum number of comments requested. */
+  /**
+   * Returns the requested maximum number of comments to send as given by the POST request.
+   * 
+   * @param request The POST request containing the requested maximum number of comments to send.
+   * @return The maximum number of comments to send.
+   */
   private int getMaxComments(HttpServletRequest request) {
     String maxCommentsString = request.getParameter("max-comments");
 
