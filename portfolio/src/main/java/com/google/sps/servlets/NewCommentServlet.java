@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,6 +38,10 @@ public class NewCommentServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    
+    String email = userService.getCurrentUser().getEmail();
+    String nickname = request.getParameter("nickname");
     String text = request.getParameter("comment-text");
     long timestamp = System.currentTimeMillis();
 
@@ -45,8 +51,14 @@ public class NewCommentServlet extends HttpServlet {
       return;
     }
 
+    // Set nickname to "Anonymous" if none specified
+    if (nickname == null || nickname.isEmpty()) {
+      nickname = "Anonymous";
+    }
+
     // Create new entity for the comment and store in Datastore
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("email", email);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 

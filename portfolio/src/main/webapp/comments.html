@@ -29,7 +29,11 @@
 
     <!-- Form to submit comments -->
     <form id="submit-comment" action="/new-comment" method="POST">
-      <p>Enter your own comment here:</p>
+      <p>
+        Enter your own comment and nickname here (if no nickname specified, 
+        the comment will be listed as Anonymous):
+      </p>
+      <input type="text" name="nickname" placeholder="Nickname"/>
       <textarea name="comment-text" placeholder="Your comment here..."></textarea>
       <input type="submit"/>
     </form>
