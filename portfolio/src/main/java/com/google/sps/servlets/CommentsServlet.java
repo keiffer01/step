@@ -36,6 +36,9 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
+  // The max number of comments to send on a GET request. Is modified on POST request.
+  private int maxComments = 5;
+
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
    * @param request The request made by the connecting client.
@@ -49,7 +52,6 @@ public class CommentsServlet extends HttpServlet {
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
 
     // Get maxComments query and check it is valid.
-    int maxComments = getMaxComments(request);
     if (maxComments == -1) {
       response.setContentType("text/html");
       response.getWriter().println("Please enter an integer between 1 and 10.");
@@ -90,24 +92,12 @@ public class CommentsServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String text = request.getParameter("comment-text");
-    long timestamp = System.currentTimeMillis();
-
-    // Do not store the comment if it the text is empty or null
-    if (text == null || text.isEmpty()) {
-      response.sendRedirect("/comments.html");
+    int maxCommentsRequest = getMaxComments(request);
+    if (maxCommentsRequest == -1) {
       return;
     }
 
-    // Create new entity for the comment and store in Datastore
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("text", text);
-    commentEntity.setProperty("timestamp", timestamp);
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
-
-    response.sendRedirect("/comments.html");
+    maxComments = maxCommentsRequest;
   }
 
   /* Returns the value of maximum number of comments requested. */
