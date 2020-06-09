@@ -218,3 +218,7 @@ footer button {
   outline: none;
   padding: 0;
 }
+
+.hidden {
+  display: none;
+}

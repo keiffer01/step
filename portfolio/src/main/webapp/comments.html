@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:bold|Roboto+Slab">
   </head>
 
-  <body onload="getComments()">
+  <body onload="getComments(); authenticateUser();">
 
     <!-- Navbar -->
     <nav id="navbar">
@@ -25,8 +25,10 @@
     <!-- Comments title header -->
     <h1 class="header">Comments</h1>
 
+    <div id="authenticate"></div>
+
     <!-- Form to submit comments -->
-    <form action="/new-comment" method="POST" id="submit-comment">
+    <form id="submit-comment" action="/new-comment" method="POST">
       <p>Enter your own comment here:</p>
       <textarea name="comment-text" placeholder="Your comment here..."></textarea>
       <input type="submit"/>
@@ -43,6 +45,7 @@
           max="10">
         <input type="submit">
       </form>
+
       <ul id="comments-list"></ul>
     </div>
 
