@@ -22,16 +22,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
- * Servlet that authenticates users using Google's Users API
- */
+/** Servlet that authenticates users using Google's Users API */
 @WebServlet("/authenticate")
 public class AuthenticationServlet extends HttpServlet {
-    
+
   /**
-   * On GET request, returns true if the user is currently logged in, false otherwise.
-   * Also returns a message to the user depending on whether they are logged in or not.
-   * 
+   * On GET request, returns true if the user is currently logged in, false otherwise. Also returns
+   * a message to the user depending on whether they are logged in or not.
+   *
    * @param request The request made by the connecting client.
    * @param response The response that is sent back to the client.
    */
@@ -47,16 +45,22 @@ public class AuthenticationServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/comments.html";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      message = 
-        "<p>You're logged in as " + userEmail + ". "
-          + "Logout <a href=\\\"" + logoutUrl + "\\\">here</a>.</p>";
+      message =
+        "<p>You're logged in as "
+          + userEmail
+          + ". "
+          + "Logout <a href=\\\""
+          + logoutUrl
+          + "\\\">here</a>.</p>";
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
       message =
         "<p>Looks like you're not logged in. "
-          + "To submit a comment, login <a href=\\\"" + loginUrl + "\\\">here</a>.</p>";
+          + "To submit a comment, login <a href=\\\""
+          + loginUrl
+          + "\\\">here</a>.</p>";
     }
 
     // Build json to send
