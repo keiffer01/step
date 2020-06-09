@@ -16,9 +16,8 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,21 +31,18 @@ import javax.servlet.http.HttpServletResponse;
 public class DeleteCommentServlet extends HttpServlet {
 
   /**
-   * On POST request, deletes the comment in the datastore given by the 
+   * On POST request, deletes the comment in the datastore given by the comment's id.
+   * 
    * @param request The request made by the connecting client.
    * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Obtain and prepare entities from datastore with kind "Comment".
+    long id = Long.parseLong(request.getParameter("id"));
+
+    Key commentEntityKey = KeyFactory.createKey("Comment", id);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Query commentsQuery = new Query("Comment");
-    PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
-
-    for (Entity entity : commentsPrepared.asIterable()) {
-        datastore.delete(entity.getKey());
-    }
-
-    response.sendRedirect("/comments.html");
+    datastore.delete(commentEntityKey);
   }
 }

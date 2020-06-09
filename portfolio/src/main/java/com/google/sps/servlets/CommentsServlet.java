@@ -62,7 +62,7 @@ public class CommentsServlet extends HttpServlet {
     Iterator<Entity> commentsIterator = commentsPrepared.asIterable().iterator();
     int countComments = 0;
     Entity entity;
-    while (commentsIterator.hasNext() || countComments >= maxComments) {
+    while (commentsIterator.hasNext() && countComments < maxComments) {
       entity = commentsIterator.next();
 
       long id = entity.getKey().getId();
