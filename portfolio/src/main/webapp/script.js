@@ -95,6 +95,7 @@ function createCommentListItem(comment) {
   // Create the comment text to put into the list item
   const listText = document.createElement("span");
   listText.innerText = comment.nickname + ": " + comment.text;
+  listItem.appendChild(listText);
 
   // Create the delete button to put into the list item if the logged in user
   // owns the comment
@@ -105,10 +106,9 @@ function createCommentListItem(comment) {
       deleteComment(comment);
       listItem.remove();
     });
+    listItem.appendChild(deleteButton);
   }
 
-  listItem.appendChild(listText);
-  listItem.appendChild(deleteButton);
   return listItem;
 }
 
