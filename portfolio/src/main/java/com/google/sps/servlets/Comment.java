@@ -6,26 +6,23 @@ package com.google.sps.servlets;
  */
 public class Comment {
     private long id;
-    private String email;
     private String nickname;
     private String text;
-    private long timestamp;
+    private boolean isOwner;
 
     /**
      * Comment constructor.
      * 
      * @param id The unique identifier of this comment.
-     * @param email Email associated with the comment.
      * @param nickname Nickname associated with the comment.
      * @param text The text content of this comment.
-     * @param timestamp The time, in milliseconds, that this comment was submitted.
+     * @param isOwner True if the logged in user wrote this comment.
      */
-    public Comment(long id, String email, String nickname, String text, long timestamp) {
+    public Comment(long id, String nickname, String text, boolean isOwner) {
         this.id = id;
-        this.email = email;
         this.nickname = nickname;
         this.text = text;
-        this.timestamp = timestamp;
+        this.isOwner = isOwner;
     }
 
     /**
@@ -35,15 +32,6 @@ public class Comment {
      */
     public long getId() {
         return id;
-    }
-
-    /**
-     * Returns the comment's email.
-     * 
-     * @return The comment's email.
-     */
-    public String getEmail() {
-        return email;
     }
 
     /**
@@ -65,12 +53,12 @@ public class Comment {
     }
 
     /**
-     * Returns the comment's timestamp.
+     * Returns if the logged in user is the owner of this comment.
      * 
-     * @return The comment's timestamp.
+     * @return True if the logged in user owns this comment.
      */
-    public long getTimestamp() {
-        return timestamp;
+    public boolean getIsOwner() {
+        return isOwner;
     }
 
     /**
@@ -80,9 +68,8 @@ public class Comment {
      */
     public String toString() {
         return "ID: " + id + "," +
-               "Email: " + email + "," +
                "Nickname: " + nickname + "," +
                "Text: " + text + "," +
-               "Timestamp: " + timestamp;
+               "IsOwner: " + isOwner;
     }
 }

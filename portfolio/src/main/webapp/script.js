@@ -94,7 +94,7 @@ function createCommentListItem(comment) {
 
   // Create the comment text to put into the list item
   const listText = document.createElement("span");
-  listText.innerText = comment.text;
+  listText.innerText = comment.nickname + ": " + comment.text;
 
   // Create the delete button to put into the list item
   const deleteButton = document.createElement("button");
