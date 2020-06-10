@@ -20,6 +20,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +48,8 @@ public class GetCommentsServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+
     // Obtain and prepare comments from Datastore
     Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -64,9 +68,16 @@ public class GetCommentsServlet extends HttpServlet {
       String email = (String) entity.getProperty("email");
       String nickname = (String) entity.getProperty("nickname");
       String text = (String) entity.getProperty("text");
-      long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, email, nickname, text, timestamp);
+      // Determine if the logged in user is the owner of this comment;
+      boolean isOwner;
+      if (userService.isUserLoggedIn()) {
+        isOwner = email.equals(userService.getCurrentUser().getEmail());
+      } else {
+        isOwner = false;
+      }
+
+      Comment comment = new Comment(id, nickname, text, isOwner);
       comments.add(comment);
 
       countComments++;
