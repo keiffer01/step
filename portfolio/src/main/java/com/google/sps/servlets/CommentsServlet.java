@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
+  private static final String COMMENT = "Comment";
+
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
    * @param request The request made by the connecting client.
@@ -43,7 +45,7 @@ public class CommentsServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Obtain and prepare comments from Datastore
-    Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    Query commentsQuery = new Query(COMMENT).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
 
