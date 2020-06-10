@@ -61,10 +61,12 @@ public class GetCommentsServlet extends HttpServlet {
       entity = commentsIterator.next();
 
       long id = entity.getKey().getId();
+      String email = (String) entity.getProperty("email");
+      String nickname = (String) entity.getProperty("nickname");
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, text, timestamp);
+      Comment comment = new Comment(id, email, nickname, text, timestamp);
       comments.add(comment);
 
       countComments++;
