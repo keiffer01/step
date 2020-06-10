@@ -96,13 +96,16 @@ function createCommentListItem(comment) {
   const listText = document.createElement("span");
   listText.innerText = comment.nickname + ": " + comment.text;
 
-  // Create the delete button to put into the list item
-  const deleteButton = document.createElement("button");
-  deleteButton.innerText = "Delete";
-  deleteButton.addEventListener("click", () => {
-    deleteComment(comment);
-    listItem.remove();
-  });
+  // Create the delete button to put into the list item if the logged in user
+  // owns the comment
+  if (comment.isOwner) {
+    const deleteButton = document.createElement("button");
+    deleteButton.innerText = "Delete";
+    deleteButton.addEventListener("click", () => {
+      deleteComment(comment);
+      listItem.remove();
+    });
+  }
 
   listItem.appendChild(listText);
   listItem.appendChild(deleteButton);
