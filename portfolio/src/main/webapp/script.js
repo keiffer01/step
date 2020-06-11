@@ -53,13 +53,27 @@ function handleFetchErrors(response) {
   return response;
 } 
 
-/** Creates a map and adds it to the page. */
+/** Creates a map with markers and adds it to the page. */
 function createMap() {
+  const myHometownPosition = {lat: 40.886, lng: -73.2573};
+  const myCollegePosition = {lat: 40.443, lng: -79.943};
+
   const map = new google.maps.Map(document.getElementById('map'), {
     // Coordinates set to my hometown.
-    center: {lat: 40.886, lng: -73.2573},
+    center: myHometownPosition,
     zoom: 14,
     styles: makeNightMapStyle()
+  });
+
+  const hometownMarker = new google.maps.Marker({
+    position: myHometownPosition,
+    map: map,
+    title: "My hometown"
+  });
+  const collegeMarker = new google.maps.Marker({
+    position: myCollegePosition,
+    map: map,
+    title: "My college"
   });
 }
 
