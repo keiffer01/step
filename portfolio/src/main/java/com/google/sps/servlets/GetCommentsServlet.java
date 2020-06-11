@@ -22,6 +22,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -133,5 +136,22 @@ public class GetCommentsServlet extends HttpServlet {
     }
 
     return maxComments;
+  }
+
+  /**
+   * Determines the positivity/negativity of comment text using the Cloud Natural Language library.
+   * 
+   * @param text The text to analyze the sentiment of.
+   * @return A value between -1 and 1, representing how negative or positive the text is.
+   * @throws IOException On failure to create LanguageServiceClient
+   */
+  private float getSentiment(String text) throws IOException {
+    Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    float score = sentiment.getScore();
+
+    languageService.close();
+    return score;
   }
 }
