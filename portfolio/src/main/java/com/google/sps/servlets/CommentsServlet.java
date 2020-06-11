@@ -106,7 +106,7 @@ public class CommentsServlet extends HttpServlet {
     response.sendRedirect("/comments.html");
   }
 
-  /* Returns the value of maximum number of comments requested. */
+  /* Returns the value of maximum number of comments requested, or -1 if the input is invalid. */
   private int getMaxComments(HttpServletRequest request) {
     String maxCommentsString = request.getParameter("max-comments");
 
