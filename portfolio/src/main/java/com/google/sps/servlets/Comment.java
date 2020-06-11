@@ -8,6 +8,7 @@ public class Comment {
     private long id;
     private String nickname;
     private String text;
+    private float sentiment;
     private boolean isOwner;
 
     /**
@@ -18,10 +19,11 @@ public class Comment {
      * @param text The text content of this comment.
      * @param isOwner True if the logged in user wrote this comment.
      */
-    public Comment(long id, String nickname, String text, boolean isOwner) {
+    public Comment(long id, String nickname, String text, float sentiment, boolean isOwner) {
         this.id = id;
         this.nickname = nickname;
         this.text = text;
+        this.sentiment = sentiment;
         this.isOwner = isOwner;
     }
 
@@ -52,6 +54,10 @@ public class Comment {
         return text;
     }
 
+    public float getSentiment() {
+        return sentiment;
+    }
+
     /**
      * Returns if the logged in user is the owner of this comment.
      * 
@@ -70,6 +76,7 @@ public class Comment {
         return "ID: " + id + "," +
                "Nickname: " + nickname + "," +
                "Text: " + text + "," +
+               "Sentiment: " + sentiment + 
                "IsOwner: " + isOwner;
     }
 }

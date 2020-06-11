@@ -72,6 +72,8 @@ public class GetCommentsServlet extends HttpServlet {
       String email = (String) entity.getProperty("email");
       String nickname = (String) entity.getProperty("nickname");
       String text = (String) entity.getProperty("text");
+      
+      float sentiment = getSentiment(text);
 
       // Determine if the logged in user is the owner of this comment;
       boolean isOwner;
@@ -81,7 +83,7 @@ public class GetCommentsServlet extends HttpServlet {
         isOwner = false;
       }
 
-      Comment comment = new Comment(id, nickname, text, isOwner);
+      Comment comment = new Comment(id, nickname, text, sentiment, isOwner);
       comments.add(comment);
 
       countComments++;
