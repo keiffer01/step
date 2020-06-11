@@ -40,6 +40,7 @@ public class GetCommentsServlet extends HttpServlet {
 
   // The max number of comments to send on a GET request. Is modified on POST request.
   private int maxComments = 5;
+  private static final String COMMENT = "Comment";
 
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
@@ -83,7 +84,7 @@ public class GetCommentsServlet extends HttpServlet {
       countComments++;
     }
 
-    // Convert comments to JSON using Gson
+    // Convert comments to JSON using Gson.
     String commentsInJson = new Gson().toJson(comments);
 
     // Send json as the response.
