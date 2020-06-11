@@ -14,6 +14,12 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
-  private List<String> comments = new ArrayList<>();
+  private static final String COMMENT = "Comment";
 
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
@@ -37,8 +43,19 @@ public class CommentsServlet extends HttpServlet {
    * @param response The response that is sent back to the client.
    */
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Obtain and prepare comments from Datastore.
+    Query commentsQuery = new Query(COMMENT).addSort("timestamp", SortDirection.DESCENDING);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
+
+    // Loop through each Comment entity and store in an ArrayList.
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : commentsPrepared.asIterable()) {
+      String comment = (String) entity.getProperty("comment");
+      comments.add(comment);
+    }
+
     // Convert comments to JSON using Gson.
     String commentsInJson = new Gson().toJson(comments);
 
@@ -53,14 +70,24 @@ public class CommentsServlet extends HttpServlet {
    * @param response The response that is sent back to the client.
    */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
-      String comment = request.getParameter("comment-input");
-      if (comment != null && !comment.isEmpty()) {
-        comments.add(comment);
-      }
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter("comment-input");
+    long timestamp = System.currentTimeMillis();
 
-      // Redirect back to comments.html.
+    // Do not store the comment if it is empty or null.
+    if (comment == null || comment.isEmpty()) {
       response.sendRedirect("/comments.html");
+      return;
     }
+
+    // Create new entity for the comment and store in Datastore.
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", comment);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+
+    response.sendRedirect("/comments.html");
+  }
 }
