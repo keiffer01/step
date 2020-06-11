@@ -64,7 +64,8 @@ function createMap() {
 }
 
 /**
- * Returns a style object for Google Maps that sets it to night mode.
+ * Returns a style object for Google Maps that sets it to night mode. Style
+ * values given in the Maps JavaScript API example page for styling maps.
  * 
  * @returns {MapTypeStyle Array} Style array for a Google Maps object.
  */
