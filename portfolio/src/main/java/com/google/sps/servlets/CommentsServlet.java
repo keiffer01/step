@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentsServlet extends HttpServlet {
 
+  private static final String COMMENT = "Comment";
+
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
    * @param request The request made by the connecting client.
@@ -42,8 +44,8 @@ public class CommentsServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Obtain and prepare comments from Datastore
-    Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    // Obtain and prepare comments from Datastore.
+    Query commentsQuery = new Query(COMMENT).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
 
@@ -69,7 +71,7 @@ public class CommentsServlet extends HttpServlet {
       }
     }
 
-    // Convert comments to JSON using Gson
+    // Convert comments to JSON using Gson.
     String commentsInJson = new Gson().toJson(comments);
 
     // Send json as the response.
@@ -87,13 +89,13 @@ public class CommentsServlet extends HttpServlet {
     String comment = request.getParameter("comment-input");
     long timestamp = System.currentTimeMillis();
 
-    // Do not store the comment if it is empty or null
+    // Do not store the comment if it is empty or null.
     if (comment == null || comment.isEmpty()) {
       response.sendRedirect("/comments.html");
       return;
     }
 
-    // Create new entity for the comment and store in Datastore
+    // Create new entity for the comment and store in Datastore.
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("comment", comment);
     commentEntity.setProperty("timestamp", timestamp);
