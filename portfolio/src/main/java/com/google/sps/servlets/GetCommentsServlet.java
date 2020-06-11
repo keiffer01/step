@@ -42,8 +42,6 @@ public class GetCommentsServlet extends HttpServlet {
 
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -81,8 +79,6 @@ public class GetCommentsServlet extends HttpServlet {
 
   /** 
    * On POST request, modifies the maximum number of comments to send.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

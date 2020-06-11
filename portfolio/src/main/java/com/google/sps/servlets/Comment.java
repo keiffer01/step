@@ -22,29 +22,14 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
-    /**
-     * Returns the comment's id.
-     * 
-     * @return The comment id.
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Returns the comment's text content.
-     * 
-     * @return The comment's text content.
-     */
     public String getText() {
         return text;
     }
 
-    /**
-     * Returns the comment's timestamp.
-     * 
-     * @return The comment's timestamp.
-     */
     public long getTimestamp() {
         return timestamp;
     }

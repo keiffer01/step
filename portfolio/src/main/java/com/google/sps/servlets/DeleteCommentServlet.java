@@ -32,9 +32,6 @@ public class DeleteCommentServlet extends HttpServlet {
 
   /**
    * On POST request, deletes the comment in the datastore given by the comment's id.
-   * 
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
