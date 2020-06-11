@@ -84,7 +84,7 @@ function handleFetchErrors(response) {
  * Create a new list item element containing text of the given comment and a
  * button to delete it.
  * 
- * @param {JSON} comment JSON containing the comment id, text, and timestamp.
+ * @param {JSON} comment JSON containing the comment fields.
  * @returns {HTMLLIElement} The list item to append to the comments list.
  */
 function createCommentListItem(comment) {
@@ -94,7 +94,13 @@ function createCommentListItem(comment) {
 
   // Create the comment text to put into the list item
   const listText = document.createElement("span");
-  listText.innerText = comment.nickname + ": " + comment.text;
+  listText.innerText = 
+    comment.nickname + 
+    ": " + 
+    comment.text + 
+    "\nSentiment analysis:" +
+    comment.sentiment +
+    "\n";
   listItem.appendChild(listText);
 
   // Create the delete button to put into the list item if the logged in user
