@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
+import javax.json.Json;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +54,11 @@ public class AuthenticationServlet extends HttpServlet {
     }
 
     // Build json to send
-    String json = Json.
+    String json = Json.createObjectBuilder()
+                  .add("isLoggedIn", isLoggedIn)
+                  .add("message", message)
+                  .build()
+                  .toString();
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
