@@ -94,13 +94,8 @@ function createCommentListItem(comment) {
 
   // Create the comment text to put into the list item
   const listText = document.createElement("span");
-  listText.innerText = 
-    comment.nickname + 
-    ": " + 
-    comment.text + 
-    "\nSentiment analysis:" +
-    comment.sentiment +
-    "\n";
+  listText.innerText = "${comment.nickname}: ${comment.text}\n" +
+                       "Sentiment Analysis: ${comment.sentiment}";
   listItem.appendChild(listText);
 
   // Create the delete button to put into the list item if the logged in user
