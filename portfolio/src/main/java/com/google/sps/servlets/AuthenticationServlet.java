@@ -29,9 +29,6 @@ public class AuthenticationServlet extends HttpServlet {
   /**
    * On GET request, returns true if the user is currently logged in, false otherwise. Also returns
    * a message to the user depending on whether they are logged in or not.
-   *
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
