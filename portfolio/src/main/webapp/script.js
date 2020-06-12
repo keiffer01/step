@@ -52,3 +52,11 @@ function handleFetchErrors(response) {
   }
   return response;
 } 
+
+/** Creates a map and adds it to the page. */
+function createMap() {
+  const map = new google.maps.Map(
+      document.getElementById('map'),
+      // Coordinates set to my hometown.
+      {center: {lat: 40.886, lng: -73.2573}, zoom: 14});
+}
