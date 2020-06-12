@@ -42,29 +42,18 @@ public class AuthenticationServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/comments.html";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      message =
-        "<p>You're logged in as "
-          + userEmail
-          + ". "
-          + "Logout <a href=\\\""
-          + logoutUrl
-          + "\\\">here</a>.</p>";
+      String LOGOUT_MESSAGE = "<p>You're logged in as %s. Logout <a href=\\\"%s\\\">here</a>.</p>";
+      message = String.format(LOGOUT_MESSAGE, userEmail, logoutUrl);
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      message =
-        "<p>Looks like you're not logged in. "
-          + "To submit a comment, login <a href=\\\""
-          + loginUrl
-          + "\\\">here</a>.</p>";
+      String LOGIN_MESSAGE = "<p>Looks like you're not logged in. To submit a comment, login <a href=\\\"%s\\\">here</a>.</p>";
+      message = String.format(LOGIN_MESSAGE, loginUrl);
     }
 
     // Build json to send
-    String json = "{";
-    json += "\"isLoggedIn\":" + isLoggedIn + ", ";
-    json += "\"message\":" + "\"" + message + "\"";
-    json += "}";
+    String json = Json.
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
