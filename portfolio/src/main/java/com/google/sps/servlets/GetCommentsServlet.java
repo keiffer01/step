@@ -71,12 +71,8 @@ public class GetCommentsServlet extends HttpServlet {
       String text = (String) entity.getProperty("text");
 
       // Determine if the logged in user is the owner of this comment;
-      boolean isOwner;
-      if (userService.isUserLoggedIn()) {
-        isOwner = email.equals(userService.getCurrentUser().getEmail());
-      } else {
-        isOwner = false;
-      }
+      boolean isOwner = userService.isUserLoggedIn() && 
+                        email.equals(userService.getCurrentUser().getEmail());
 
       Comment comment = new Comment(id, nickname, text, isOwner);
       comments.add(comment);
