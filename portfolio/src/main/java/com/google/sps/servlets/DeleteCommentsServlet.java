@@ -33,12 +33,9 @@ public class DeleteCommentsServlet extends HttpServlet {
 
   /**
    * On POST request, deletes all comments currently stored in the server's datastore.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Obtain and prepare entities from datastore with kind "Comment".
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query commentsQuery = new Query("Comment");
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);

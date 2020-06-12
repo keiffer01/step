@@ -37,20 +37,19 @@ function getRandomFact() {
 function getComments() {
   const maxComments = document.getElementById("max-comments").value;
   
-  // Append value of maxComments to the fetch request
   fetch('/comments?max-comments='.concat(parseInt(maxComments)))
     .then(handleFetchErrors)
     .then(response => response.json())
     .then(commentsInJson => {
-      // Display returned comments
+      // Display returned comments.
       document.getElementById('comments-container').innerText =
         commentsInJson.toString();
   }).catch(error => {
-      // Display generic error message in case of server error
+      // Display generic error message in case of server error.
       document.getElementById('comments-container').innerText = error;
   });
 
-  // Prevent page reload
+  // Prevent page reload.
   return false;
 }
 

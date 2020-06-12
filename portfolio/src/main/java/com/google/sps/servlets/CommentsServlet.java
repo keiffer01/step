@@ -39,8 +39,6 @@ public class CommentsServlet extends HttpServlet {
 
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,7 +47,6 @@ public class CommentsServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
 
-    // Get maxComments query and check it is valid.
     int maxComments = getMaxComments(request);
     if (maxComments == -1) {
       response.setContentType("text/html");
@@ -57,8 +54,6 @@ public class CommentsServlet extends HttpServlet {
       return;
     }
 
-    // Loop through each Comment entity until all comments are seen or until the max number of
-    // comments have been reached, and store in an ArrayList.
     List<String> comments = new ArrayList<>();
     int countComments = 0;
     for (Entity entity : commentsPrepared.asIterable()) {
@@ -81,8 +76,6 @@ public class CommentsServlet extends HttpServlet {
 
   /** 
    * On POST request, stores given comment in the comments ArrayList.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
