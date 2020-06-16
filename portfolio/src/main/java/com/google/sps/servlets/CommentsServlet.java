@@ -39,8 +39,6 @@ public class CommentsServlet extends HttpServlet {
 
   /** 
    * On GET request, writes to the response the comments list as a JSON string.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -49,11 +47,23 @@ public class CommentsServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
 
-    // Loop through each Comment entity and store in an ArrayList.
+    int maxComments = getMaxComments(request);
+    if (maxComments == -1) {
+      response.setContentType("text/html");
+      response.getWriter().println("Please enter an integer between 1 and 10.");
+      return;
+    }
+
     List<String> comments = new ArrayList<>();
+    int countComments = 0;
     for (Entity entity : commentsPrepared.asIterable()) {
       String comment = (String) entity.getProperty("comment");
       comments.add(comment);
+
+      countComments++;
+      if (countComments >= maxComments) {
+        break;
+      }
     }
 
     // Convert comments to JSON using Gson.
@@ -66,8 +76,6 @@ public class CommentsServlet extends HttpServlet {
 
   /** 
    * On POST request, stores given comment in the comments ArrayList.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -89,5 +97,27 @@ public class CommentsServlet extends HttpServlet {
     datastore.put(commentEntity);
 
     response.sendRedirect("/comments.html");
+  }
+
+  /* Returns the value of maximum number of comments requested, or -1 if the input is invalid. */
+  private int getMaxComments(HttpServletRequest request) {
+    String maxCommentsString = request.getParameter("max-comments");
+
+    // Convert input to int.
+    int maxComments;
+    try {
+      maxComments = Integer.parseInt(maxCommentsString);
+    } catch (NumberFormatException e) {
+      System.err.println("Could not convert to int: " + maxCommentsString);
+      return -1;
+    }
+
+    // Check that the input is between 1 and 10
+    if (maxComments < 1 || maxComments > 10) {
+      System.err.println("Max comments is out of range: " + maxCommentsString);
+      return -1;
+    }
+
+    return maxComments;
   }
 }
