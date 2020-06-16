@@ -30,7 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns comments.
  */
 @WebServlet("/get-comments")
@@ -40,10 +40,8 @@ public class GetCommentsServlet extends HttpServlet {
   private int maxComments = 5;
   private static final String COMMENT = "Comment";
 
-  /** 
+  /**
    * On GET request, writes to the response the comments list as a JSON string.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -79,10 +77,8 @@ public class GetCommentsServlet extends HttpServlet {
     response.getWriter().println(commentsInJson);
   }
 
-  /** 
+  /**
    * On POST request, modifies the maximum number of comments to send.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -96,8 +92,8 @@ public class GetCommentsServlet extends HttpServlet {
   }
 
   /**
-   * Returns the requested maximum number of comments to send as given by the POST request.
-   * 
+   * Returns the requested maximum number of comments to send, or -1 of the input is invalid.
+   *
    * @param request The POST request containing the requested maximum number of comments to send.
    * @return The maximum number of comments to send.
    */

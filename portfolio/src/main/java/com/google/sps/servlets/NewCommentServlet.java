@@ -31,8 +31,6 @@ public class NewCommentServlet extends HttpServlet {
 
   /** 
    * On POST request, stores given comment in the the datastore.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -63,8 +63,6 @@ public class FactsServlet extends HttpServlet {
    * On GET request, writes to response a psuedo-randomly chosen fun fact from the facts list.
    * "Psuedo-random" in that currQuestionIndex points to the next fun fact to write, and reshuffles
    * the facts list when currQuestionIndex reaches its length.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
