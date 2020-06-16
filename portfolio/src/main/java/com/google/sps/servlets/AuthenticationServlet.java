@@ -26,6 +26,10 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that authenticates users using Google's Users API */
 @WebServlet("/authenticate")
 public class AuthenticationServlet extends HttpServlet {
+  private String LOGIN_MESSAGE = "<p>Looks like you're not logged in. To submit a comment, login"
+      + "<a href=\\\"%s\\\">here</a>.</p>";
+  private String LOGOUT_MESSAGE =
+      "<p>You're logged in as %s. Logout <a href=\\\"%s\\\">here</a>.</p>";
 
   /**
    * On GET request, returns true if the user is currently logged in, false otherwise. Also returns
@@ -43,22 +47,20 @@ public class AuthenticationServlet extends HttpServlet {
       String urlToRedirectToAfterUserLogsOut = "/comments.html";
       String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
 
-      String LOGOUT_MESSAGE = "<p>You're logged in as %s. Logout <a href=\\\"%s\\\">here</a>.</p>";
       message = String.format(LOGOUT_MESSAGE, userEmail, logoutUrl);
     } else {
       String urlToRedirectToAfterUserLogsIn = "/comments.html";
       String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
 
-      String LOGIN_MESSAGE = "<p>Looks like you're not logged in. To submit a comment, login <a href=\\\"%s\\\">here</a>.</p>";
       message = String.format(LOGIN_MESSAGE, loginUrl);
     }
 
     // Build json to send
     String json = Json.createObjectBuilder()
-                  .add("isLoggedIn", isLoggedIn)
-                  .add("message", message)
-                  .build()
-                  .toString();
+                      .add("isLoggedIn", isLoggedIn)
+                      .add("message", message)
+                      .build()
+                      .toString();
 
     response.setContentType("application/json;");
     response.getWriter().println(json);
