@@ -45,7 +45,7 @@ function getComments() {
 /**
  * Returns the response if its HTTP status code is successful as given by its
  * "ok" flag. If not, throws a generic error message.
- * 
+ *
  * @param {Response} response The HTTP response returned by the servlet.
  */
 function handleFetchErrors(response) {
@@ -58,7 +58,7 @@ function handleFetchErrors(response) {
 /**
  * Create a new list item element containing text of the given comment and a
  * button to delete it.
- * 
+ *
  * @param {JSON} comment JSON containing the comment id, text, and timestamp.
  * @returns {HTMLLIElement} The list item to append to the comments list.
  */
@@ -86,11 +86,124 @@ function createCommentListItem(comment) {
 
 /**
  * Deletes the given comment from the datastore.
- * 
+ *
  * @param {JSON} comment The comment to be deleted.
  */
 function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append("id", comment.id);
   fetch("/delete-comment", {method: "POST", body: params});
+}
+
+/** Creates a map with markers and adds it to the page. */
+function createMap() {
+  const myHometownPosition = {lat: 40.886, lng: -73.2573};
+  const myCollegePosition = {lat: 40.443, lng: -79.943};
+
+  const map = new google.maps.Map(document.getElementById('map'), {
+    // Coordinates set to my hometown.
+    center: myHometownPosition,
+    zoom: 14,
+    styles: makeNightMapStyle()
+  });
+
+  const hometownMarker = new google.maps.Marker({
+    position: myHometownPosition,
+    map: map,
+    title: "My hometown"
+  });
+  const collegeMarker = new google.maps.Marker({
+    position: myCollegePosition,
+    map: map,
+    title: "My college"
+  });
+}
+
+/**
+ * Returns a style object for Google Maps that sets it to night mode. Style
+ * values given in the Maps JavaScript API example page for styling maps.
+ *
+ * @returns {MapTypeStyle Array} Style array for a Google Maps object.
+ */
+function makeNightMapStyle() {
+  return [
+    {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+    {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+    {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+    {
+      featureType: 'administrative.locality',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}]
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{color: '#263c3f'}]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#6b9a76'}]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{color: '#38414e'}]
+    },
+    {
+      featureType: 'road',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#212a37'}]
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#9ca5b3'}]
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{color: '#746855'}]
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry.stroke',
+      stylers: [{color: '#1f2835'}]
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#f3d19c'}]
+    },
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{color: '#2f3948'}]
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#d59563'}]
+    },
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{color: '#17263c'}]
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{color: '#515c6d'}]
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.stroke',
+      stylers: [{color: '#17263c'}]
+    }
+  ];
 }
