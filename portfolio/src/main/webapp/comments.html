@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:bold|Roboto+Slab">
   </head>
 
-  <body>
+  <body onload="getComments()">
 
     <!-- Navbar -->
     <nav id="navbar">
@@ -26,30 +26,25 @@
     <h1 class="header">Comments</h1>
 
     <!-- Form to submit comments -->
-    <form action="/comments" method="POST" id="submit-comment">
+    <form action="/new-comment" method="POST" id="submit-comment">
       <p>Enter your own comment here:</p>
-      <textarea name="comment-input" placeholder="Your comment here..."></textarea>
+      <textarea name="comment-text" placeholder="Your comment here..."></textarea>
       <input type="submit"/>
     </form>
 
     <!-- Comments container -->
     <div id="comments">
-      <form onsubmit="return getComments()">
+      <form action="/get-comments" method="POST">
         <label for="max-comments">
           Specify the number of most recent comments you would like to see
           (between 1 and 10):
         </label>
         <input type="number" id="max-comments" name="max-comments" min="1"
-          max="10" value="5">
-        <input type="submit" value="Get comments">
+          max="10">
+        <input type="submit">
       </form>
-      <div id="comments-container"></div>
+      <ul id="comments-list"></ul>
     </div>
-
-    <!-- Button to delete comments -->
-    <form action="/delete-comments" method="POST" id="delete-comments">
-      <input type="submit" value="Delete all comments">
-    </form>
 
     <!-- Footer -->
     <footer>
