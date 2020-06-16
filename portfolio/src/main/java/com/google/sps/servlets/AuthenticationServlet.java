@@ -42,16 +42,13 @@ public class AuthenticationServlet extends HttpServlet {
     String message;
 
     // Create message based on whether the user is logged in or not
+    String redirectUrl = "/comments.html";
     if (isLoggedIn) {
       String userEmail = userService.getCurrentUser().getEmail();
-      String urlToRedirectToAfterUserLogsOut = "/comments.html";
-      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);
-
+      String logoutUrl = userService.createLogoutURL(redirectUrl);
       message = String.format(LOGOUT_MESSAGE, userEmail, logoutUrl);
     } else {
-      String urlToRedirectToAfterUserLogsIn = "/comments.html";
-      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-
+      String loginUrl = userService.createLoginURL(redirectUrl);
       message = String.format(LOGIN_MESSAGE, loginUrl);
     }
 
