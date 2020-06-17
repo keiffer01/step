@@ -15,7 +15,6 @@
 package com.google.sps;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
