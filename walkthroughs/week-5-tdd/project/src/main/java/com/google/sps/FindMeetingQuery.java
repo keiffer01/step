@@ -16,19 +16,29 @@ package com.google.sps;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Arrays;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
 
+  /**
+   * Returns all {@code TimeRange}s that satisfies the request constraints.
+   *
+   * @param events Collection of already scheduled {@code Event}s for the day.
+   * @param request {@code MeetingRequest} containing all restraints for this query.
+   * @return A Collection containing all {@code TimeRange}s that satisfies the constraints
+   * specified by {@code request}.
+   */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
+    // Get the availabilities of each attendee in the request.
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
     for (String attendee : request.getAttendees()) {
       attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
     }
 
+    // Get the intersection of the availabilities of every attendee in the request, with the entire
+    // day as a base case.
     availableTimes.add(TimeRange.WHOLE_DAY);
     for (ArrayList<TimeRange> ranges : attendeeAvailabilities) {
       availableTimes = rangesIntersection(availableTimes, ranges);
@@ -48,6 +58,7 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
     ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
+    // Add TimeRanges over the entire day, skipping over the events that contains the attendee.
     int availableStart = TimeRange.START_OF_DAY;
     for (Event event : events) {
       if (event.getAttendees().contains(attendee)) {
@@ -63,10 +74,23 @@ public final class FindMeetingQuery {
     return availableTimes;
   }
 
+  /**
+   * Given two {@code TimeRange} ArrayLists, returns the intersection of the two interval lists.
+   *
+   * Example: |---| |--|
+   *            |-----|
+   * Returns:   |-| |-|
+   *
+   * @param arr1 The first ArrayList to intersect with.
+   * @param arr2 The second ArrayList to intersect with.
+   * @return The intersection of the two ArrayLists.
+   */
   private ArrayList<TimeRange> rangesIntersection(ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
     ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
     int arr1Index = 0, arr2Index = 0;
 
+    // Iterating through the TimeRange endpoints of the ArrayLists, add the overlap between the
+    // segments to the intersection.
     while (arr1Index < arr1.size() && arr2Index < arr2.size()) {
       TimeRange rangeFrom1 = arr1.get(arr1Index);
       TimeRange rangeFrom2 = arr2.get(arr2Index);
@@ -87,6 +111,12 @@ public final class FindMeetingQuery {
     return intersection;
   }
 
+  /**
+   * Removes the times in the given {@code ranges} that is below the given time duration.
+   *
+   * @param ranges The list of {@code TimeRange}s to consider.
+   * @param duration The duration that all {@code TimeRange}s must not fall under.
+   */
   private void removeTimesBelowDuration(ArrayList<TimeRange> ranges, long duration) {
     // Use iterator to avoid ConcurrentModificationException
     Iterator<TimeRange> iterator = ranges.iterator();
