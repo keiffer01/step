@@ -43,7 +43,7 @@ public final class FindMeetingQuery {
       availableTimes = rangesIntersection(availableTimes, ranges);
     }
 
-    removeTimesBelowDuration(availableTimes, request.getDuration());
+    availableTimes = removeTimesBelowDuration(availableTimes, request.getDuration());
     return availableTimes;
   }
 
@@ -112,19 +112,19 @@ public final class FindMeetingQuery {
   }
 
   /**
-   * Removes the times in the given {@code ranges} that is below the given time duration.
+   * Removes the times in the given {@code ranges} parameter that is below the given time duration.
    *
    * @param ranges The list of {@code TimeRange}s to consider.
    * @param duration The duration that all {@code TimeRange}s must not fall under.
    */
-  private void removeTimesBelowDuration(ArrayList<TimeRange> ranges, long duration) {
-    // Use iterator to avoid ConcurrentModificationException
-    Iterator<TimeRange> iterator = ranges.iterator();
-    while (iterator.hasNext()) {
-      TimeRange range = iterator.next();
-      if (range.duration() < duration) {
-        iterator.remove();
+  private ArrayList<TimeRange> removeTimesBelowDuration(
+      ArrayList<TimeRange> ranges, long duration) {
+    ArrayList<TimeRange> newTimeRanges = new ArrayList<TimeRange>();
+    for (TimeRange range : ranges) {
+      if (range.duration() >= duration) {
+        newTimeRanges.add(range);
       }
     }
+    return newTimeRanges;
   }
 }
