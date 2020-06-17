@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
-
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
@@ -85,7 +84,8 @@ public final class FindMeetingQuery {
    * @param arr2 The second ArrayList to intersect with.
    * @return The intersection of the two ArrayLists.
    */
-  private ArrayList<TimeRange> rangesIntersection(ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
+  private ArrayList<TimeRange> rangesIntersection(
+      ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
     ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
     int arr1Index = 0, arr2Index = 0;
 
