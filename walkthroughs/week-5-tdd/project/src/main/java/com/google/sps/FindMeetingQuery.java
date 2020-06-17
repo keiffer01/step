@@ -22,6 +22,9 @@ public final class FindMeetingQuery {
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
+   * Has O(n*m) time complexity, where n is the number of attendees in the request and m is the
+   * size of the {@code events} parameter.
+   *
    * @param events Collection of already scheduled {@code Event}s for the day.
    * @param request {@code MeetingRequest} containing all restraints for this query.
    * @return A Collection containing all {@code TimeRange}s that satisfies the constraints
