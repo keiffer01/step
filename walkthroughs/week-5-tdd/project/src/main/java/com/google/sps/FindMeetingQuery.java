@@ -15,21 +15,27 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Arrays;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
 
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    Collection<String> attendees = request.getAttendees();
-    ArrayList<Collection<TimeRange>> availabilities = new ArrayList<Collection<TimeRange>>();
-    availabilities.add(Arrays.asList(TimeRange.WHOLE_DAY));
+    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
-    for (String attendee : attendees) {
-      availabilities.add(getAttendeeAvailability(events, attendee));
+    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
+    for (String attendee : request.getAttendees()) {
+      attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
     }
 
-    throw new UnsupportedOperationException("TODO: Implement this method.");
+    availableTimes.add(TimeRange.WHOLE_DAY);
+    for (ArrayList<TimeRange> ranges : attendeeAvailabilities) {
+      availableTimes = rangesIntersection(availableTimes, ranges);
+    }
+
+    removeTimesBelowDuration(availableTimes, request.getDuration());
+    return availableTimes;
   }
 
   /**
@@ -39,8 +45,8 @@ public final class FindMeetingQuery {
    * @param attendee Person who we wish to find the available times.
    * @return {@code TimeRange} Collection where the attendee is available.
    */
-  private Collection<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
-    Collection<TimeRange> availableTimes = new ArrayList<TimeRange>();
+  private ArrayList<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
+    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
     int availableStart = TimeRange.START_OF_DAY;
     for (Event event : events) {
@@ -57,8 +63,8 @@ public final class FindMeetingQuery {
     return availableTimes;
   }
 
-  private Collection<TimeRange> intervalsIntersection(ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
-    Collection<TimeRange> intersection = new ArrayList<TimeRange>();
+  private ArrayList<TimeRange> rangesIntersection(ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
+    ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
     int arr1Index = 0, arr2Index = 0;
 
     while (arr1Index < arr1.size() && arr2Index < arr2.size()) {
@@ -79,5 +85,16 @@ public final class FindMeetingQuery {
     }
 
     return intersection;
+  }
+
+  private void removeTimesBelowDuration(ArrayList<TimeRange> ranges, long duration) {
+    // Use iterator to avoid ConcurrentModificationException
+    Iterator<TimeRange> iterator = ranges.iterator();
+    while (iterator.hasNext()) {
+      TimeRange range = iterator.next();
+      if (range.duration() < duration) {
+        iterator.remove();
+      }
+    }
   }
 }
