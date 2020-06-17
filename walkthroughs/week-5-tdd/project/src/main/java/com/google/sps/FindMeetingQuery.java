@@ -57,4 +57,27 @@ public final class FindMeetingQuery {
     return availableTimes;
   }
 
+  private Collection<TimeRange> intervalsIntersection(ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
+    Collection<TimeRange> intersection = new ArrayList<TimeRange>();
+    int arr1Index = 0, arr2Index = 0;
+
+    while (arr1Index < arr1.size() && arr2Index < arr2.size()) {
+      TimeRange rangeFrom1 = arr1.get(arr1Index);
+      TimeRange rangeFrom2 = arr2.get(arr2Index);
+
+      if (rangeFrom1.overlaps(rangeFrom2)) {
+        int start = Math.max(rangeFrom1.start(), rangeFrom2.start());
+        int end = Math.min(rangeFrom1.end(), rangeFrom2.end());
+        intersection.add(TimeRange.fromStartEnd(start, end, false));
+      }
+
+      if (rangeFrom1.end() < rangeFrom2.end()) {
+        arr1Index++;
+      } else {
+        arr2Index++;
+      }
+    }
+
+    return intersection;
+  }
 }
