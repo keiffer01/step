@@ -30,35 +30,45 @@ public final class FindMeetingQuery {
    * specified by {@code request}.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
+    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities =
+        getAllAttendeeAvailabilities(events, request.getAttendees());
     ArrayList<ArrayList<TimeRange>> optionalAttendeeAvailabilities =
-        new ArrayList<ArrayList<TimeRange>>();
-    for (String attendee : request.getAttendees()) {
-      attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
-    }
-    for (String attendee : request.getOptionalAttendees()) {
-      optionalAttendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
-    }
+        getAllAttendeeAvailabilities(events, request.getOptionalAttendees());
 
-    ArrayList<TimeRange> availableTimesWithoutOptional = new ArrayList<TimeRange>();
-    availableTimesWithoutOptional.add(TimeRange.WHOLE_DAY);
-    for (ArrayList<TimeRange> ranges : attendeeAvailabilities) {
-      availableTimesWithoutOptional = rangesIntersection(availableTimesWithoutOptional, ranges);
-    }
-    ArrayList<TimeRange> availableTimesWithOptional =
-        new ArrayList<TimeRange>(availableTimesWithoutOptional);
-    for (ArrayList<TimeRange> ranges : optionalAttendeeAvailabilities) {
-      availableTimesWithOptional = rangesIntersection(availableTimesWithOptional, ranges);
-    }
+    // Whole day TimeRange is a base case because it is the identity element, and should also be
+    // returned when no attendees are given.
+    ArrayList<TimeRange> base = new ArrayList<TimeRange>();
+    base.add(TimeRange.WHOLE_DAY);
+    ArrayList<TimeRange> availableTimesWithoutOptional = allTimeRangesIntersection(attendeeAvailabilities, base);
+    ArrayList<TimeRange> availableTimesWithOptional = allTimeRangesIntersection(optionalAttendeeAvailabilities, availableTimesWithoutOptional);
 
     availableTimesWithoutOptional =
         removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
     availableTimesWithOptional =
         removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
 
+    // We must also check that mandatory attendees is not empty. If there are only optional
+    // attendees, we do not with to accidentally return the entire day since it is  base case.
     return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty()
         ? availableTimesWithoutOptional
         : availableTimesWithOptional;
+  }
+
+  /**
+   * Gets a list of all the available times that each attendee in attendees is available in the day.
+   *
+   * @param events {@code Event} Collection for the day.
+   * @param attendees The collection of attendees which we wish to find all the availabilities of.
+   * @return An ArrayList where each element is the list of times that a unique attendee is
+   *         available.
+   */
+  private ArrayList<ArrayList<TimeRange>> getAllAttendeeAvailabilities(
+      Collection<Event> events, Collection<String> attendees) {
+    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
+    for (String attendee : attendees) {
+      attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
+    }
+    return attendeeAvailabilities;
   }
 
   /**
@@ -66,7 +76,7 @@ public final class FindMeetingQuery {
    *
    * @param events {@code Event} Collection for the day.
    * @param attendee Person who we wish to find the available times.
-   * @return {@code TimeRange} Collection where the attendee is available.
+   * @return {@code TimeRange} ArrayList where the attendee is available.
    */
   private ArrayList<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
     ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
@@ -88,6 +98,21 @@ public final class FindMeetingQuery {
   }
 
   /**
+   * Given a {@code TimeRange} list of lists, return the interval list intersections.
+   *
+   * @param allLists The {@code TimeRange} list of lists that we wish to get the intersection of.
+   * @return The intersection of all the lists given.
+   */
+  private ArrayList<TimeRange> allTimeRangesIntersection(
+      ArrayList<ArrayList<TimeRange>> allLists, ArrayList<TimeRange> base) {
+    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>(base);
+    for (ArrayList<TimeRange> ranges : allLists) {
+      availableTimes = twoTimeRangesIntersection(availableTimes, ranges);
+    }
+    return availableTimes;
+  }
+
+  /**
    * Given two {@code TimeRange} ArrayLists, returns the intersection of the two interval lists.
    *
    * Example: |---| |--|
@@ -98,7 +123,7 @@ public final class FindMeetingQuery {
    * @param arr2 The second ArrayList to intersect with.
    * @return The intersection of the two ArrayLists.
    */
-  private ArrayList<TimeRange> rangesIntersection(
+  private ArrayList<TimeRange> twoTimeRangesIntersection(
       ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
     ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
     int arr1Index = 0, arr2Index = 0;
