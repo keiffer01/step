@@ -52,11 +52,13 @@ public final class FindMeetingQuery {
     }
 
     availableTimesWithoutOptional =
-      removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
+        removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
     availableTimesWithOptional =
-      removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
+        removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
 
-    return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty() ? availableTimesWithoutOptional : availableTimesWithOptional;
+    return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty()
+        ? availableTimesWithoutOptional
+        : availableTimesWithOptional;
   }
 
   /**
