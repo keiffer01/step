@@ -34,12 +34,13 @@ public class NewCommentServlet extends HttpServlet {
   /**
    * {@inheritDoc}
    *
-   * Stores the given comment in the datastore.
+   * Stores the given comment in the datastore with various parameters identifying the owner of the
+   * comment.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
-    
+
     String email = userService.getCurrentUser().getEmail();
     String nickname = request.getParameter("nickname");
     String text = request.getParameter("comment-text");
@@ -50,12 +51,10 @@ public class NewCommentServlet extends HttpServlet {
       return;
     }
 
-    // Set nickname to "Anonymous" if none specified
     if (nickname == null || nickname.isEmpty()) {
       nickname = "Anonymous";
     }
 
-    // Create new entity for the comment and store in Datastore
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("email", email);
     commentEntity.setProperty("nickname", nickname);

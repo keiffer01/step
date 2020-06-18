@@ -35,7 +35,7 @@ function authenticateUser() {
     .then(response => response.json())
     .then(authenticationResults => {
       authenticationContainer.innerHTML = authenticationResults.message;
-      
+
       if (!authenticationResults.isLoggedIn) {
         submitCommentForm.classList.add("hidden");
       }
@@ -62,7 +62,6 @@ function getComments() {
         commentsList.appendChild(createCommentListItem(comment));
       })
     }).catch(error => {
-      // Display generic error message in case of server error
       document.getElementById("comments-list").innerText = error;
   });
 }
@@ -88,17 +87,16 @@ function handleFetchErrors(response) {
  * @returns {HTMLLIElement} The list item to append to the comments list.
  */
 function createCommentListItem(comment) {
-  // Create the list item
+  // Create the list item.
   const listItem = document.createElement("li");
   listItem.className = "comment";
 
-  // Create the comment text to put into the list item
+  // Create the comment text to put into the list item.
   const listText = document.createElement("span");
   listText.innerText = comment.nickname + ": " + comment.text;
   listItem.appendChild(listText);
 
-  // Create the delete button to put into the list item if the logged in user
-  // owns the comment
+  // Only show delete button to owner of the comment.
   if (comment.isOwner) {
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
