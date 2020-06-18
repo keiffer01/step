@@ -25,16 +25,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns comments.
  */
 @WebServlet("/new-comment")
 public class NewCommentServlet extends HttpServlet {
 
-  /** 
-   * On POST request, stores given comment in the the datastore.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
+  /**
+   * {@inheritDoc}
+   *
+   * Stores the given comment in the datastore.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -45,7 +45,6 @@ public class NewCommentServlet extends HttpServlet {
     String text = request.getParameter("comment-text");
     long timestamp = System.currentTimeMillis();
 
-    // Do not store the comment if it the text is empty or null
     if (text == null || text.isEmpty()) {
       response.sendRedirect("/comments.html");
       return;

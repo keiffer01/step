@@ -17,7 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.users.UserService;
@@ -25,14 +25,13 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns comments.
  */
 @WebServlet("/get-comments")
@@ -42,10 +41,13 @@ public class GetCommentsServlet extends HttpServlet {
   private int maxComments = 5;
   private static final String COMMENT = "Comment";
 
-  /** 
-   * On GET request, writes to the response the comments list as a JSON string.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
+  /**
+   * {@inheritDoc}
+   *
+   * Returns the most recently posted comments.
+   *
+   * This servlet is called every time comments.html is loaded. The number of comments to send is
+   * specified by {@code maxComments}.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -54,44 +56,32 @@ public class GetCommentsServlet extends HttpServlet {
     // Obtain and prepare comments from Datastore
     Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
+    List<Entity> commentsPrepared =
+      datastore.prepare(commentsQuery).asList(FetchOptions.Builder.withLimit(maxComments));
 
-    // Loop through each Comment entity until all comments are seen or until the max number of
-    // comments have been reached, and store in an ArrayList.
+    // Loop through each Comment entity until all comments are seen, storing them in an ArrayList
     List<Comment> comments = new ArrayList<>();
-    Iterator<Entity> commentsIterator = commentsPrepared.asIterable().iterator();
-    int countComments = 0;
-    Entity entity;
-    while (commentsIterator.hasNext() && countComments < maxComments) {
-      entity = commentsIterator.next();
-
+    for (Entity entity : commentsPrepared) {
       long id = entity.getKey().getId();
       String email = (String) entity.getProperty("email");
       String nickname = (String) entity.getProperty("nickname");
       String text = (String) entity.getProperty("text");
-
-      // Determine if the logged in user is the owner of this comment;
-      boolean isOwner = userService.isUserLoggedIn() && 
+      boolean isOwner = userService.isUserLoggedIn() &&
                         email.equals(userService.getCurrentUser().getEmail());
 
       Comment comment = new Comment(id, nickname, text, isOwner);
       comments.add(comment);
-
-      countComments++;
     }
 
-    // Convert comments to JSON using Gson.
     String commentsInJson = new Gson().toJson(comments);
-
-    // Send json as the response.
     response.setContentType("application/json;");
     response.getWriter().println(commentsInJson);
   }
 
-  /** 
-   * On POST request, modifies the maximum number of comments to send.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
+  /**
+   * {@inheritDoc}
+   *
+   * Modifies the {@maxComments} static variable.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -105,8 +95,8 @@ public class GetCommentsServlet extends HttpServlet {
   }
 
   /**
-   * Returns the requested maximum number of comments to send as given by the POST request.
-   * 
+   * Returns the requested maximum number of comments to send, or -1 of the input is invalid.
+   *
    * @param request The POST request containing the requested maximum number of comments to send.
    * @return The maximum number of comments to send.
    */
