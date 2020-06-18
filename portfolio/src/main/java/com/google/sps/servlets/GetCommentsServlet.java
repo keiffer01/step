@@ -17,6 +17,7 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -53,25 +54,18 @@ public class GetCommentsServlet extends HttpServlet {
     // Obtain and prepare comments from Datastore.
     Query commentsQuery = new Query(COMMENT).addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery commentsPrepared = datastore.prepare(commentsQuery);
+    List<Entity> commentsPrepared =
+      datastore.prepare(commentsQuery).asList(FetchOptions.Builder.withLimit(maxComments));
 
-    // Loop through each Comment entity until all comments are seen or until the max number of
-    // comments have been reached, and store in an ArrayList.
+    // Loop through each Comment entity until all comments are seen, storing them in an ArrayList
     List<Comment> comments = new ArrayList<>();
-    Iterator<Entity> commentsIterator = commentsPrepared.asIterable().iterator();
-    int countComments = 0;
-    Entity entity;
-    while (commentsIterator.hasNext() && countComments < maxComments) {
-      entity = commentsIterator.next();
-
+    for (Entity entity : commentsPrepared) {
       long id = entity.getKey().getId();
       String text = (String) entity.getProperty("text");
       long timestamp = (long) entity.getProperty("timestamp");
 
       Comment comment = new Comment(id, text, timestamp);
       comments.add(comment);
-
-      countComments++;
     }
 
     // Convert comments to JSON using Gson.
