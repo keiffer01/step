@@ -21,25 +21,4 @@ public class Comment {
     this.text = text;
     this.timestamp = timestamp;
   }
-
-  public long getId() {
-    return id;
-  }
-
-  public String getText() {
-    return text;
-  }
-
-  public long getTimestamp() {
-    return timestamp;
-  }
-
-  /**
-   * Returns a string of the comment object's contents in a human-readable format.
-   *
-   * @return A string containing the comment's contents.
-   */
-  public String toString() {
-    return id + ": " + text + " " + timestamp;
-  }
 }
