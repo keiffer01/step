@@ -30,23 +30,33 @@ public final class FindMeetingQuery {
    * specified by {@code request}.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
-
-    // Get the availabilities of each attendee in the request.
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
+    ArrayList<ArrayList<TimeRange>> optionalAttendeeAvailabilities =
+        new ArrayList<ArrayList<TimeRange>>();
     for (String attendee : request.getAttendees()) {
       attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
     }
-
-    // Get the intersection of the availabilities of every attendee in the request, with the entire
-    // day as a base case.
-    availableTimes.add(TimeRange.WHOLE_DAY);
-    for (ArrayList<TimeRange> ranges : attendeeAvailabilities) {
-      availableTimes = rangesIntersection(availableTimes, ranges);
+    for (String attendee : request.getOptionalAttendees()) {
+      optionalAttendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
     }
 
-    availableTimes = removeTimesBelowDuration(availableTimes, request.getDuration());
-    return availableTimes;
+    ArrayList<TimeRange> availableTimesWithoutOptional = new ArrayList<TimeRange>();
+    availableTimesWithoutOptional.add(TimeRange.WHOLE_DAY);
+    for (ArrayList<TimeRange> ranges : attendeeAvailabilities) {
+      availableTimesWithoutOptional = rangesIntersection(availableTimesWithoutOptional, ranges);
+    }
+    ArrayList<TimeRange> availableTimesWithOptional =
+        new ArrayList<TimeRange>(availableTimesWithoutOptional);
+    for (ArrayList<TimeRange> ranges : optionalAttendeeAvailabilities) {
+      availableTimesWithOptional = rangesIntersection(availableTimesWithOptional, ranges);
+    }
+
+    availableTimesWithoutOptional =
+      removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
+    availableTimesWithOptional =
+      removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
+
+    return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty() ? availableTimesWithoutOptional : availableTimesWithOptional;
   }
 
   /**
