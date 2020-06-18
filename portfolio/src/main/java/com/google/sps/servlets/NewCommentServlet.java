@@ -23,14 +23,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns comments.
  */
 @WebServlet("/new-comment")
 public class NewCommentServlet extends HttpServlet {
 
-  /** 
-   * On POST request, stores given comment in the the datastore.
+  /**
+   * {@inheritDoc}
+   *
+   * Stores the given comment in the datastore.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

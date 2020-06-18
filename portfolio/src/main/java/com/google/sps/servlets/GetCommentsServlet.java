@@ -41,7 +41,12 @@ public class GetCommentsServlet extends HttpServlet {
   private static final String COMMENT = "Comment";
 
   /**
-   * On GET request, writes to the response the comments list as a JSON string.
+   * {@inheritDoc}
+   *
+   * Returns the most recently posted comments.
+   *
+   * This servlet is called every time comments.html is loaded. The number of comments to send is
+   * specified by {@code maxComments}.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -78,7 +83,9 @@ public class GetCommentsServlet extends HttpServlet {
   }
 
   /**
-   * On POST request, modifies the maximum number of comments to send.
+   * {@inheritDoc}
+   *
+   * Modifies the {@maxComments} static variable.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

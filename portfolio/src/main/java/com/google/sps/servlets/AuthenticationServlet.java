@@ -32,8 +32,13 @@ public class AuthenticationServlet extends HttpServlet {
       "<p>You're logged in as %s. Logout <a href=\\\"%s\\\">here</a>.</p>";
 
   /**
-   * On GET request, returns true if the user is currently logged in, false otherwise. Also returns
-   * a message to the user depending on whether they are logged in or not.
+   * {@inheritDoc}
+   *
+   * Authenticates the user and returns a corresponding message.
+   *
+   * This function is called each time comments.html is loaded to authenticate the user. If already
+   * logged in, a logout link and corresponding message is shown. If not logged in, a login link and
+   * corresponding message is shown.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
