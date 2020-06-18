@@ -24,17 +24,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that deletes comments from Datastore.
  */
 @WebServlet("/delete-comment")
 public class DeleteCommentServlet extends HttpServlet {
 
   /**
-   * On POST request, deletes the comment in the datastore given by the comment's id.
-   * 
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
+   * {@inheritDoc}
+   *
+   * Deletes the comment in the datastore given by the comment's id.
+   *
+   * Each comment listed in comments.html is associated with a Delete button that, when clicked,
+   * makes a POST request to this servlet containing the comment's id. This function handles
+   * deleting that comment from the Datastore.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

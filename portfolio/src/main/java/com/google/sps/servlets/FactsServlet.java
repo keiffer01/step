@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns fun facts.
  */
 @WebServlet("/facts")
@@ -34,7 +34,9 @@ public class FactsServlet extends HttpServlet {
   // Pointer to the current index of facts given when the servlet is called.
   private int currQuestionIndex;
 
-  /** 
+  /**
+   * {@inheritDoc}
+   *
    * Initializes currQuestionIndex and facts list on servlet startup.
    */
   @Override
@@ -59,12 +61,14 @@ public class FactsServlet extends HttpServlet {
     Collections.shuffle(facts);
   }
 
-  /** 
-   * On GET request, writes to response a psuedo-randomly chosen fun fact from the facts list.
-   * "Psuedo-random" in that currQuestionIndex points to the next fun fact to write, and reshuffles
-   * the facts list when currQuestionIndex reaches its length.
-   * @param request The request made by the connecting client.
-   * @param response The response that is sent back to the client.
+  /**
+   * {@inheritDoc}
+   *
+   * Writes to response a psuedo-randomly chosen fun fact.
+   *
+   * This function is called when a user requests a new random fun fact in the footer of any web
+   * page. "Psuedo-random" is done with currQuestionIndex pointing to the next fun fact to write,
+   * and reshuffles the facts list when currQuestionIndex reaches its length.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

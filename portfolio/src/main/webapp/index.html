@@ -8,9 +8,11 @@
     <title>Keiffer Acoba</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:bold|Roboto+Slab">
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWbXqn71gio2txtmitwXlBoEL5gr1kirE"></script>
   </head>
 
-  <body>
+  <body onload="createMap()">
 
     <!-- Navbar -->
     <nav>
@@ -78,14 +80,24 @@
       </div>
     </section>
 
+    <!-- Map -->
+    <section class="two-columns">
+      <div class="left">
+        <div id="map"></div>
+      </div>
+      <div class="right">
+        <p>
+          This Google map contains two pins showing the locations of my 
+          hometown, Kings Park, and my college, Carnegie Mellon University!
+        </p>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer>
       <div id="facts">Wanna learn more about me?</div>
       <div id="generate-fact">Click <button onclick="getRandomFact()">here</button> for a random fun fact!</div>
     </footer>
-
-    <!-- Get Ionicons -->
-    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
 
   </body>
 
