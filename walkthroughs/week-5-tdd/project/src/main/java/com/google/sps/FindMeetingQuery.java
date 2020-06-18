@@ -30,7 +30,8 @@ public final class FindMeetingQuery {
    * specified by {@code request}.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = getAllAttendeeAvailabilities(events, request.getAttendees());
+    ArrayList<ArrayList<TimeRange>> attendeeAvailabilities =
+        getAllAttendeeAvailabilities(events, request.getAttendees());
     ArrayList<TimeRange> availableTimes = allTimeRangesIntersection(attendeeAvailabilities);
     availableTimes = removeTimesBelowDuration(availableTimes, request.getDuration());
     return availableTimes;
@@ -44,7 +45,8 @@ public final class FindMeetingQuery {
    * @return An ArrayList where each element is the list of times that a unique attendee is
    *         available.
    */
-  private ArrayList<ArrayList<TimeRange>> getAllAttendeeAvailabilities(Collection<Event> events, Collection<String> attendees) {
+  private ArrayList<ArrayList<TimeRange>> getAllAttendeeAvailabilities(
+      Collection<Event> events, Collection<String> attendees) {
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities = new ArrayList<ArrayList<TimeRange>>();
     for (String attendee : attendees) {
       attendeeAvailabilities.add(getAttendeeAvailability(events, attendee));
