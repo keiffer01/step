@@ -39,7 +39,6 @@ public class NewCommentServlet extends HttpServlet {
     String text = request.getParameter("comment-text");
     long timestamp = System.currentTimeMillis();
 
-    // Do not store the comment if it the text is empty or null
     if (text == null || text.isEmpty()) {
       response.sendRedirect("/comments.html");
       return;

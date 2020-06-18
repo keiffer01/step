@@ -66,10 +66,7 @@ public class GetCommentsServlet extends HttpServlet {
       comments.add(comment);
     }
 
-    // Convert comments to JSON using Gson.
     String commentsInJson = new Gson().toJson(comments);
-
-    // Send json as the response.
     response.setContentType("application/json;");
     response.getWriter().println(commentsInJson);
   }
