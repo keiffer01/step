@@ -39,8 +39,10 @@ public final class FindMeetingQuery {
     // returned when no attendees are given.
     ArrayList<TimeRange> base = new ArrayList<TimeRange>();
     base.add(TimeRange.WHOLE_DAY);
-    ArrayList<TimeRange> availableTimesWithoutOptional = allTimeRangesIntersection(attendeeAvailabilities, base);
-    ArrayList<TimeRange> availableTimesWithOptional = allTimeRangesIntersection(optionalAttendeeAvailabilities, availableTimesWithoutOptional);
+    ArrayList<TimeRange> availableTimesWithoutOptional =
+        allTimeRangesIntersection(attendeeAvailabilities, base);
+    ArrayList<TimeRange> availableTimesWithOptional =
+        allTimeRangesIntersection(optionalAttendeeAvailabilities, availableTimesWithoutOptional);
 
     availableTimesWithoutOptional =
         removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
