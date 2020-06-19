@@ -54,7 +54,7 @@ public final class FindMeetingQuery {
         removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
 
     // We must also check that mandatory attendees is not empty. If there are only optional
-    // attendees, we do not with to accidentally return the entire day since it is the base case.
+    // attendees, we do not wish to accidentally return the entire day since it is the base case.
     return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty()
         ? availableTimesWithoutOptional
         : availableTimesWithOptional;
