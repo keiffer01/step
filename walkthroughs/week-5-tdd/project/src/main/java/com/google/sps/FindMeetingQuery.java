@@ -70,15 +70,30 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
     ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
-    // Add TimeRanges over the entire day, skipping over the events that contains the attendee.
+    // Starting from the beginning of the day, add TimeRanges where the attendee is available. Skip
+    // over the events accordingly where the attendee is listed as attending.
     int availableStart = TimeRange.START_OF_DAY;
     for (Event event : events) {
       if (event.getAttendees().contains(attendee)) {
         int eventStart = event.getWhen().start();
         int eventEnd = event.getWhen().end();
 
-        availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
-        availableStart = eventEnd;
+        // Case where attendee has partially overlapping events:
+        //     |-----|
+        //        |-----|
+        if (event.getWhen().contains(availableStart)) {
+          availableStart = eventEnd;
+
+        // Case where attendee has completely overlapping events:
+        //     |------|
+        //       |--|
+        } else if (eventStart < availableStart) {
+          // Skip
+
+        } else {
+          availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
+          availableStart = eventEnd;
+        }
       }
     }
     availableTimes.add(TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, true));
