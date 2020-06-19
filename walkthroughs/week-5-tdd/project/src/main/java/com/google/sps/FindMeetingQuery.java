@@ -111,7 +111,8 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> twoTimeRangesIntersection(
       ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
     ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
-    int arr1Index = 0, arr2Index = 0;
+    int arr1Index = 0;
+    int arr2Index = 0;
 
     // Iterating through the TimeRange endpoints of the ArrayLists, add the overlap between the
     // segments to the intersection.
