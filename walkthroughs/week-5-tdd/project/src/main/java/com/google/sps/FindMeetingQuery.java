@@ -144,12 +144,12 @@ public final class FindMeetingQuery {
    */
   private ArrayList<TimeRange> removeTimesBelowDuration(
       ArrayList<TimeRange> ranges, long duration) {
-    ArrayList<TimeRange> newTimeRanges = new ArrayList<TimeRange>();
+    ArrayList<TimeRange> timeRangesAboveDuration = new ArrayList<TimeRange>();
     for (TimeRange range : ranges) {
       if (range.duration() >= duration) {
-        newTimeRanges.add(range);
+        timeRangesAboveDuration.add(range);
       }
     }
-    return newTimeRanges;
+    return timeRangesAboveDuration;
   }
 }
