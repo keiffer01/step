@@ -15,13 +15,14 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
-   * Has O(n*m) time complexity, where n is the number of attendees in the request and m is the
+   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m is the
    * size of the {@code events} parameter.
    *
    * @param events Collection of already scheduled {@code Event}s for the day.
@@ -30,10 +31,13 @@ public final class FindMeetingQuery {
    * specified by {@code request}.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    ArrayList<Event> sortedEvents = new ArrayList<Event>(events);
+    Collections.sort(sortedEvents, Event.ORDER_BY_START_TIME);
+
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities =
-        getAllAttendeeAvailabilities(events, request.getAttendees());
+        getAllAttendeeAvailabilities(sortedEvents, request.getAttendees());
     ArrayList<ArrayList<TimeRange>> optionalAttendeeAvailabilities =
-        getAllAttendeeAvailabilities(events, request.getOptionalAttendees());
+        getAllAttendeeAvailabilities(sortedEvents, request.getOptionalAttendees());
 
     // Whole day TimeRange is a base case because it is the identity element, and should also be
     // returned when no attendees are given.
@@ -76,6 +80,8 @@ public final class FindMeetingQuery {
   /**
    * Gets the available times in a day that the given attendee is available.
    *
+   * REQUIRES: The events given must be sorted by time.
+   *
    * @param events {@code Event} Collection for the day.
    * @param attendee Person who we wish to find the available times.
    * @return {@code TimeRange} ArrayList where the attendee is available.
@@ -83,15 +89,30 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> getAttendeeAvailability(Collection<Event> events, String attendee) {
     ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
 
-    // Add TimeRanges over the entire day, skipping over the events that contains the attendee.
+    // Starting from the beginning of the day, add TimeRanges where the attendee is available. Skip
+    // over the events accordingly where the attendee is listed as attending.
     int availableStart = TimeRange.START_OF_DAY;
     for (Event event : events) {
       if (event.getAttendees().contains(attendee)) {
         int eventStart = event.getWhen().start();
         int eventEnd = event.getWhen().end();
 
-        availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
-        availableStart = eventEnd;
+        // Case where attendee has partially overlapping events:
+        //     |-----|
+        //        |-----|
+        if (event.getWhen().contains(availableStart)) {
+          availableStart = eventEnd;
+
+        // Case where attendee has completely overlapping events:
+        //     |------|
+        //       |--|
+        } else if (eventStart < availableStart) {
+          // Skip
+
+        } else {
+          availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
+          availableStart = eventEnd;
+        }
       }
     }
     availableTimes.add(TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, true));
@@ -128,7 +149,8 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> twoTimeRangesIntersection(
       ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
     ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
-    int arr1Index = 0, arr2Index = 0;
+    int arr1Index = 0;
+    int arr2Index = 0;
 
     // Iterating through the TimeRange endpoints of the ArrayLists, add the overlap between the
     // segments to the intersection.
@@ -160,12 +182,12 @@ public final class FindMeetingQuery {
    */
   private ArrayList<TimeRange> removeTimesBelowDuration(
       ArrayList<TimeRange> ranges, long duration) {
-    ArrayList<TimeRange> newTimeRanges = new ArrayList<TimeRange>();
+    ArrayList<TimeRange> timeRangesAboveDuration = new ArrayList<TimeRange>();
     for (TimeRange range : ranges) {
       if (range.duration() >= duration) {
-        newTimeRanges.add(range);
+        timeRangesAboveDuration.add(range);
       }
     }
-    return newTimeRanges;
+    return timeRangesAboveDuration;
   }
 }
