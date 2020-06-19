@@ -16,6 +16,7 @@ package com.google.sps;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -82,6 +83,16 @@ public final class Event {
     // mainly be used as a way to skip the costly {@code equals()} call.
     return title.hashCode();
   }
+
+  /**
+   * A comparator for sorting events by their start time.
+   */
+  public static final Comparator<Event> ORDER_BY_START_TIME = new Comparator<Event>() {
+    @Override
+    public int compare(Event a, Event b) {
+      return TimeRange.ORDER_BY_START.compare(a.getWhen(), b.getWhen());
+    }
+  };
 
   @Override
   public boolean equals(Object other) {

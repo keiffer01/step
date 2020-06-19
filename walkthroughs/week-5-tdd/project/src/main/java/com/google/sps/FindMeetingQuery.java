@@ -15,13 +15,14 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.ArrayList;
 
 public final class FindMeetingQuery {
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
-   * Has O(n*m) time complexity, where n is the number of attendees in the request and m is the
+   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m is the
    * size of the {@code events} parameter.
    *
    * @param events Collection of already scheduled {@code Event}s for the day.
@@ -30,8 +31,11 @@ public final class FindMeetingQuery {
    * specified by {@code request}.
    */
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+    ArrayList<Event> sortedEvents = new ArrayList<Event>(events);
+    Collections.sort(sortedEvents, Event.ORDER_BY_START_TIME);
+
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities =
-        getAllAttendeeAvailabilities(events, request.getAttendees());
+        getAllAttendeeAvailabilities(sortedEvents, request.getAttendees());
     ArrayList<TimeRange> availableTimes = allTimeRangesIntersection(attendeeAvailabilities);
     availableTimes = removeTimesBelowDuration(availableTimes, request.getDuration());
     return availableTimes;
@@ -56,6 +60,8 @@ public final class FindMeetingQuery {
 
   /**
    * Gets the available times in a day that the given attendee is available.
+   *
+   * REQUIRES: The events given must be sorted by time.
    *
    * @param events {@code Event} Collection for the day.
    * @param attendee Person who we wish to find the available times.
