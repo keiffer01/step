@@ -53,7 +53,7 @@ public class GetCommentsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
-    // Obtain and prepare comments from Datastore
+    // Obtain and prepare comments from Datastore.
     Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Entity> commentsPrepared =
