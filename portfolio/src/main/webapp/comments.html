@@ -30,7 +30,7 @@
     <!-- Form to submit comments -->
     <form id="submit-comment" action="/new-comment" method="POST">
       <p>
-        Enter your own comment and nickname here (if no nickname specified, 
+        Enter your own comment and nickname here (if no nickname specified,
         the comment will be listed as Anonymous):
       </p>
       <input type="text" name="nickname" placeholder="Nickname"/>
@@ -51,8 +51,8 @@
       </form>
 
       <p>
-        Comments shown below with sentiment analysis between -1 and 1. Closer to
-        1 is a more positive comment, while closer to -1 is a more negative one.
+        Comments shown below with sentiment analysis between 0 and 10. Closer to
+        10 is a more positive comment, while closer to 0 is a more negative one.
       </p>
       <ul id="comments-list"></ul>
     </div>

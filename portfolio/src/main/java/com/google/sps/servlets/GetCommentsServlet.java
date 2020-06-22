@@ -129,7 +129,7 @@ public class GetCommentsServlet extends HttpServlet {
    * Determines the positivity/negativity of comment text using the Cloud Natural Language library.
    *
    * @param text The text to analyze the sentiment of.
-   * @return A value between -1 and 1, representing how negative or positive the text is.
+   * @return A value between 0.0 and 10.0, representing how negative or positive the text is.
    * @throws IOException On failure to create LanguageServiceClient
    */
   private float getSentiment(String text) throws IOException {
@@ -137,6 +137,9 @@ public class GetCommentsServlet extends HttpServlet {
     LanguageServiceClient languageService = LanguageServiceClient.create();
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
     float score = sentiment.getScore();
+
+    // Convert to 0.0 - 10.0 scale from the -1.0 to 1.0 scale.
+    score = (score + 1) * 5;
 
     languageService.close();
     return score;
