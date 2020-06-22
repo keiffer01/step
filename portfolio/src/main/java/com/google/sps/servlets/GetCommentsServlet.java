@@ -55,7 +55,6 @@ public class GetCommentsServlet extends HttpServlet {
     List<Entity> commentsPrepared =
       datastore.prepare(commentsQuery).asList(FetchOptions.Builder.withLimit(maxComments));
 
-    // Loop through each Comment entity until all comments are seen, storing them in an ArrayList
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : commentsPrepared) {
       long id = entity.getKey().getId();
