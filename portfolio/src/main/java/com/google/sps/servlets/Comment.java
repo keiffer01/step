@@ -6,19 +6,22 @@ package com.google.sps.servlets;
  */
 public class Comment {
   private long id;
+  private String nickname;
   private String text;
-  private long timestamp;
+  private boolean isOwner;
 
   /**
    * Comment constructor.
    *
    * @param id The unique identifier of this comment.
+   * @param nickname Nickname associated with the comment.
    * @param text The text content of this comment.
-   * @param timestamp The time, in milliseconds, that this comment was submitted.
+   * @param isOwner True if the logged in user wrote this comment.
    */
-  public Comment(long id, String text, long timestamp) {
+  public Comment(long id, String nickname, String text, boolean isOwner) {
     this.id = id;
+    this.nickname = nickname;
     this.text = text;
-    this.timestamp = timestamp;
+    this.isOwner = isOwner;
   }
 }
