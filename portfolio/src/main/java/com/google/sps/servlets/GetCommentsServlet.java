@@ -56,13 +56,12 @@ public class GetCommentsServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
 
-    // Obtain and prepare comments from Datastore
+    // Obtain and prepare comments from Datastore.
     Query commentsQuery = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Entity> commentsPrepared =
       datastore.prepare(commentsQuery).asList(FetchOptions.Builder.withLimit(maxComments));
 
-    // Loop through each Comment entity until all comments are seen, storing them in an ArrayList
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : commentsPrepared) {
       long id = entity.getKey().getId();
