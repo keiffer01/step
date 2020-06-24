@@ -23,6 +23,31 @@ function getRandomFact() {
 }
 
 /**
+ * Determines if the user is logged in using the authenticate servlet.
+ * Displays a login/logout link depending on the user status.
+ */
+function authenticateUser() {
+  const authenticationContainer = document.getElementById("authenticate");
+  const submitCommentForm = document.getElementById("submit-comment");
+
+  fetch("/authenticate")
+    .then(handleFetchErrors)
+    .then(response => response.json())
+    .then(authenticationResults => {
+      authenticationContainer.innerHTML = authenticationResults.message;
+      
+      if (!authenticationResults.isLoggedIn) {
+        submitCommentForm.classList.add("hidden");
+      }
+    })
+    .catch(error => {
+      // Proceed as if the user is not logged in
+      submitCommentForm.classList.add("hidden");
+      authenticationContainer.innerHTML = "<p>" + error + "</p>";
+    });
+}
+
+/**
  * Returns comments from the comments servlet, placing each comment as a new
  * list element in an unordered list. On error, displays a generic error message
  * instead.
@@ -50,7 +75,7 @@ function getComments() {
  */
 function handleFetchErrors(response) {
   if (!response.ok) {
-    throw "Looks like something went wrong, you can try again.";
+    throw "Looks like something went wrong. Try refreshing the page and trying again.";
   }
   return response;
 }

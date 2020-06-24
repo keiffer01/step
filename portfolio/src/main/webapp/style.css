@@ -219,6 +219,10 @@ footer button {
   padding: 0;
 }
 
+.hidden {
+  display: none;
+}
+
 #map {
   height: 600px;
   width: 600px;
