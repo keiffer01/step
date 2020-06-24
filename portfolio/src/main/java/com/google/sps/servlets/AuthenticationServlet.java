@@ -17,19 +17,20 @@ package com.google.sps.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
-import javax.json.Json;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /** Servlet that authenticates users using Google's Users API */
 @WebServlet("/authenticate")
 public class AuthenticationServlet extends HttpServlet {
-  private String LOGIN_MESSAGE = "<p>Looks like you're not logged in. To submit a comment, login"
-      + "<a href=\\\"%s\\\">here</a>.</p>";
+  private String LOGIN_MESSAGE = "<p>Looks like you're not logged in. To submit a comment, login "
+      + "<a href=%s>here</a>.</p>";
   private String LOGOUT_MESSAGE =
-      "<p>You're logged in as %s. Logout <a href=\\\"%s\\\">here</a>.</p>";
+      "<p>You're logged in as %s. Logout <a href=%s>here</a>.</p>";
 
   /**
    * {@inheritDoc}
@@ -57,14 +58,15 @@ public class AuthenticationServlet extends HttpServlet {
       message = String.format(LOGIN_MESSAGE, loginUrl);
     }
 
-    // Build json to send
-    String json = Json.createObjectBuilder()
-                      .add("isLoggedIn", isLoggedIn)
-                      .add("message", message)
-                      .build()
-                      .toString();
+    JSONObject authenticationResult = new JSONObject();
+    try {
+      authenticationResult.put("isLoggedIn", isLoggedIn);
+      authenticationResult.put("message", message);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
 
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(authenticationResult.toString());
   }
 }
