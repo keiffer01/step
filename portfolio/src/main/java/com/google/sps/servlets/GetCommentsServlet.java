@@ -129,7 +129,7 @@ public class GetCommentsServlet extends HttpServlet {
    *
    * @param text The text to analyze the sentiment of.
    * @return A value between 0.0 and 10.0, representing how negative or positive the text is.
-   * @throws IOException On failure to create LanguageServiceClient
+   * @throws IOException On failure to create LanguageServiceClient.
    */
   private float getSentiment(String text) throws IOException {
     Document doc = Document.newBuilder().setContent(text).setType(Document.Type.PLAIN_TEXT).build();
