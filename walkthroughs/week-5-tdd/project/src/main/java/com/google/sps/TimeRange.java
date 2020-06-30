@@ -213,7 +213,7 @@ public final class TimeRange {
       if (rangeFrom1.overlaps(rangeFrom2)) {
         int start = Math.max(rangeFrom1.start(), rangeFrom2.start());
         int end = Math.min(rangeFrom1.end(), rangeFrom2.end());
-        intersection.add(TimeRange.fromStartEnd(start, end, false));
+        intersection.add(TimeRange.fromStartEnd(start, end, /*inclusiveEnd=*/false));
       }
 
       if (rangeFrom1.end() < rangeFrom2.end()) {

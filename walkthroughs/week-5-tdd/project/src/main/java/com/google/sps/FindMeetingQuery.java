@@ -22,8 +22,8 @@ public final class FindMeetingQuery {
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
-   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m is the
-   * size of the {@code events} parameter.
+   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m
+   * is the size of the {@code events} parameter.
    *
    * @param events Collection of already scheduled {@code Event}s for the day.
    * @param request {@code MeetingRequest} containing all restraints for this query.
@@ -85,19 +85,21 @@ public final class FindMeetingQuery {
         if (event.getWhen().contains(availableStart)) {
           availableStart = eventEnd;
 
-        // Case where attendee has completely overlapping events:
-        //     |------|
-        //       |--|
+          // Case where attendee has completely overlapping events:
+          //     |------|
+          //       |--|
         } else if (eventStart < availableStart) {
           // Skip
 
         } else {
-          availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
+          availableTimes.add(
+              TimeRange.fromStartEnd(availableStart, eventStart, /*inclusiveEnd=*/false));
           availableStart = eventEnd;
         }
       }
     }
-    availableTimes.add(TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, true));
+    availableTimes.add(
+        TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, /*inclusiveEnd=*/true));
 
     return availableTimes;
   }
