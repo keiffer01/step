@@ -36,10 +36,28 @@ public final class FindMeetingQuery {
 
     ArrayList<ArrayList<TimeRange>> attendeeAvailabilities =
         getAllAttendeeAvailabilities(sortedEvents, request.getAttendees());
-    ArrayList<TimeRange> availableTimes =
-        TimeRange.allTimeRangesIntersection(attendeeAvailabilities);
-    availableTimes = removeTimesBelowDuration(availableTimes, request.getDuration());
-    return availableTimes;
+    ArrayList<ArrayList<TimeRange>> optionalAttendeeAvailabilities =
+        getAllAttendeeAvailabilities(sortedEvents, request.getOptionalAttendees());
+
+    // Whole day TimeRange is a base case because it is the identity element, and should also be
+    // returned when no attendees are given.
+    ArrayList<TimeRange> base = new ArrayList<TimeRange>();
+    base.add(TimeRange.WHOLE_DAY);
+    ArrayList<TimeRange> availableTimesWithoutOptional =
+        allTimeRangesIntersection(attendeeAvailabilities, base);
+    ArrayList<TimeRange> availableTimesWithOptional =
+        allTimeRangesIntersection(optionalAttendeeAvailabilities, availableTimesWithoutOptional);
+
+    availableTimesWithoutOptional =
+        removeTimesBelowDuration(availableTimesWithoutOptional, request.getDuration());
+    availableTimesWithOptional =
+        removeTimesBelowDuration(availableTimesWithOptional, request.getDuration());
+
+    // We must also check that mandatory attendees is not empty. If there are only optional
+    // attendees, we do not wish to accidentally return the entire day since it is the base case.
+    return availableTimesWithOptional.isEmpty() && !request.getAttendees().isEmpty()
+        ? availableTimesWithoutOptional
+        : availableTimesWithOptional;
   }
 
   /**
