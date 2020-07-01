@@ -395,7 +395,7 @@ public final class FindMeetingQueryTest {
 
     Assert.assertEquals(expected, actual);
   }
-
+  
   @Test
   public void onlyOptionalAttendees() {
     // No mandatory attendees, only two optional attendees with several gaps in their schedules.

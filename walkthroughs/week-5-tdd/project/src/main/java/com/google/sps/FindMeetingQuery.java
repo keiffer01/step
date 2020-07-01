@@ -22,8 +22,8 @@ public final class FindMeetingQuery {
   /**
    * Returns all {@code TimeRange}s that satisfies the request constraints.
    *
-   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m is the
-   * size of the {@code events} parameter.
+   * Has O(m*max(n, log m)) time complexity, where n is the number of attendees in the request and m
+   * is the size of the {@code events} parameter.
    *
    * @param events Collection of already scheduled {@code Event}s for the day.
    * @param request {@code MeetingRequest} containing all restraints for this query.
@@ -103,75 +103,23 @@ public final class FindMeetingQuery {
         if (event.getWhen().contains(availableStart)) {
           availableStart = eventEnd;
 
-        // Case where attendee has completely overlapping events:
-        //     |------|
-        //       |--|
+          // Case where attendee has completely overlapping events:
+          //     |------|
+          //       |--|
         } else if (eventStart < availableStart) {
           // Skip
 
         } else {
-          availableTimes.add(TimeRange.fromStartEnd(availableStart, eventStart, false));
+          availableTimes.add(
+              TimeRange.fromStartEnd(availableStart, eventStart, /*inclusiveEnd=*/false));
           availableStart = eventEnd;
         }
       }
     }
-    availableTimes.add(TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, true));
+    availableTimes.add(
+        TimeRange.fromStartEnd(availableStart, TimeRange.END_OF_DAY, /*inclusiveEnd=*/true));
 
     return availableTimes;
-  }
-
-  /**
-   * Given a {@code TimeRange} list of lists, return the interval list intersections.
-   *
-   * @param allLists The {@code TimeRange} list of lists that we wish to get the intersection of.
-   * @return The intersection of all the lists given.
-   */
-  private ArrayList<TimeRange> allTimeRangesIntersection(
-      ArrayList<ArrayList<TimeRange>> allLists, ArrayList<TimeRange> base) {
-    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>(base);
-    for (ArrayList<TimeRange> ranges : allLists) {
-      availableTimes = twoTimeRangesIntersection(availableTimes, ranges);
-    }
-    return availableTimes;
-  }
-
-  /**
-   * Given two {@code TimeRange} ArrayLists, returns the intersection of the two interval lists.
-   *
-   * Example: |---| |--|
-   *            |-----|
-   * Returns:   |-| |-|
-   *
-   * @param arr1 The first ArrayList to intersect with.
-   * @param arr2 The second ArrayList to intersect with.
-   * @return The intersection of the two ArrayLists.
-   */
-  private ArrayList<TimeRange> twoTimeRangesIntersection(
-      ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
-    ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
-    int arr1Index = 0;
-    int arr2Index = 0;
-
-    // Iterating through the TimeRange endpoints of the ArrayLists, add the overlap between the
-    // segments to the intersection.
-    while (arr1Index < arr1.size() && arr2Index < arr2.size()) {
-      TimeRange rangeFrom1 = arr1.get(arr1Index);
-      TimeRange rangeFrom2 = arr2.get(arr2Index);
-
-      if (rangeFrom1.overlaps(rangeFrom2)) {
-        int start = Math.max(rangeFrom1.start(), rangeFrom2.start());
-        int end = Math.min(rangeFrom1.end(), rangeFrom2.end());
-        intersection.add(TimeRange.fromStartEnd(start, end, false));
-      }
-
-      if (rangeFrom1.end() < rangeFrom2.end()) {
-        arr1Index++;
-      } else {
-        arr2Index++;
-      }
-    }
-
-    return intersection;
   }
 
   /**

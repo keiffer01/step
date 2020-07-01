@@ -14,6 +14,7 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
@@ -166,6 +167,63 @@ public final class TimeRange {
     }
 
     return (hours * 60) + minutes;
+  }
+
+  /**
+   * Given a {@code TimeRange} list of lists, return the interval list intersections. Uses the
+   * twoTimeRangesIntersection function for its underlying implementation.
+   *
+   * @param allLists The {@code TimeRange} list of lists that we wish to get the intersection of.
+   * @return The intersection of all the lists given.
+   */
+  public static ArrayList<TimeRange> allTimeRangesIntersection(ArrayList<ArrayList<TimeRange>> allLists) {
+    ArrayList<TimeRange> availableTimes = new ArrayList<TimeRange>();
+    // Whole day TimeRange is a base case because it is the identity element, and should also be
+    // returned when no attendees are given.
+    availableTimes.add(TimeRange.WHOLE_DAY);
+    for (ArrayList<TimeRange> ranges : allLists) {
+      availableTimes = twoTimeRangesIntersection(availableTimes, ranges);
+    }
+    return availableTimes;
+  }
+
+  /**
+   * Given two {@code TimeRange} ArrayLists, returns the intersection of the two interval lists.
+   *
+   * Example: |---| |--|
+   *            |-----|
+   * Returns:   |-| |-|
+   *
+   * @param arr1 The first ArrayList to intersect with.
+   * @param arr2 The second ArrayList to intersect with.
+   * @return The intersection of the two ArrayLists.
+   */
+  public static ArrayList<TimeRange> twoTimeRangesIntersection(
+      ArrayList<TimeRange> arr1, ArrayList<TimeRange> arr2) {
+    ArrayList<TimeRange> intersection = new ArrayList<TimeRange>();
+    int arr1Index = 0;
+    int arr2Index = 0;
+
+    // Iterating through the TimeRange endpoints of the ArrayLists, add the overlap between the
+    // segments to the intersection.
+    while (arr1Index < arr1.size() && arr2Index < arr2.size()) {
+      TimeRange rangeFrom1 = arr1.get(arr1Index);
+      TimeRange rangeFrom2 = arr2.get(arr2Index);
+
+      if (rangeFrom1.overlaps(rangeFrom2)) {
+        int start = Math.max(rangeFrom1.start(), rangeFrom2.start());
+        int end = Math.min(rangeFrom1.end(), rangeFrom2.end());
+        intersection.add(TimeRange.fromStartEnd(start, end, /*inclusiveEnd=*/false));
+      }
+
+      if (rangeFrom1.end() < rangeFrom2.end()) {
+        arr1Index++;
+      } else {
+        arr2Index++;
+      }
+    }
+
+    return intersection;
   }
 
   /**

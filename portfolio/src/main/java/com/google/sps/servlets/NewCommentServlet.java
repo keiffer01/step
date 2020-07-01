@@ -17,34 +17,47 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
+/**
  * Servlet that stores and returns comments.
  */
 @WebServlet("/new-comment")
 public class NewCommentServlet extends HttpServlet {
 
-  /** 
-   * On POST request, stores given comment in the the datastore.
+  /**
+   * {@inheritDoc}
+   *
+   * Stores the given comment in the datastore with various parameters identifying the owner of the
+   * comment.
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+
+    String email = userService.getCurrentUser().getEmail();
+    String nickname = request.getParameter("nickname");
     String text = request.getParameter("comment-text");
     long timestamp = System.currentTimeMillis();
 
-    // Do not store the comment if it the text is empty or null
     if (text == null || text.isEmpty()) {
       response.sendRedirect("/comments.html");
       return;
     }
 
-    // Create new entity for the comment and store in Datastore
+    if (nickname == null || nickname.isEmpty()) {
+      nickname = "Anonymous";
+    }
+
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("email", email);
+    commentEntity.setProperty("nickname", nickname);
     commentEntity.setProperty("text", text);
     commentEntity.setProperty("timestamp", timestamp);
 
